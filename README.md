@@ -1,5 +1,10 @@
-> これは [RPISEC/MBE](https://github.com/RPISEC/MBE) の日本語訳です。原著のライセンス (BSD-2-Clause) に従います。著作権表示は原著のとおり LICENSE にあります。
-> 訳したのは説明文とコメントのみで、コードは原著のままです。講義スライドは本リポジトリに含まれていないため、訳していません。
+> **これは日本語訳です。**
+>
+> - 原著: [RPISEC/MBE](https://github.com/RPISEC/MBE)(原著者: RPISEC)
+> - ライセンス: BSD-2-Clause — 翻訳も同じライセンスです([ライセンス全文](LICENSE))。原文から翻訳(変更)しています
+> - 訳した範囲: README・ERRATA・課題コードのコメントと説明文(コードは原著のまま)
+> - 訳していないもの: 講義スライド(原著のリポジトリに含まれていません)。出題の挙動やヒントが変わる文字列は訳していません
+> - 他の日本語訳: [一覧](https://github.com/orgs/0xFF-MinusOne/repositories?q=-ja)
 
 # Modern Binary Exploitation - CSCI 4968
 このリポジトリには、[RPISEC](http://rpis.ec) が 2015 年春に [Rensselaer Polytechnic Institute](http://rpi.edu) で
