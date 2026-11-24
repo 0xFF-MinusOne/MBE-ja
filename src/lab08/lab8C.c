@@ -18,23 +18,23 @@ struct fileComp {
 
 char* readfd(int fd)
 {
-	// Find length of file
+	// ファイルの長さを調べる
 	int size = lseek(fd, 0, SEEK_END);
 	if(size >= 255)
 	{
-		printf("Your file is too big.\n");
+		printf("ファイルが大きすぎます。\n");
 		exit(EXIT_FAILURE);
 	}
-	// Reset fd to beginning of file
+	// fd をファイルの先頭に戻す
 	lseek(fd, 0, SEEK_SET);
-	// Allocate space for the file and a null byte
+	// ファイルの内容と null バイトの分の領域を確保する
 	char* fileContents = malloc((size+1) & 0xff);
 	if(!fileContents)
 	{
-		printf("Could not allocate space for file contents\n");
+		printf("ファイルの内容用の領域を確保できませんでした\n");
 		exit(EXIT_FAILURE);
 	}
-	// Read the file contents into the buffer
+	// ファイルの内容をバッファに読み込む
 	int numRead = read(fd, fileContents, size & 0xff);
 	return fileContents;
 }
@@ -43,18 +43,18 @@ int getfd(char* arg)
 {
 	if(arg[0] != '-' || arg[1] != 'f' || arg[3] != '=')
 	{
-		printf("Invalid formatting in argument \"%s\"\n", arg);
+		printf("引数 \"%s\" の書式が不正です\n", arg);
 		return -1;
 	}
 
 	int fd;
 	if(arg[2] == 'n')
 	{
-		// O_NOFOLLOW means that it won't follow symlinks. Sorry.
+		// O_NOFOLLOW は、シンボリックリンクをたどらないという意味です。ごめんなさい。
 		fd = open(arg+4, O_NOFOLLOW | O_RDONLY);
 		if(fd == -1)
 		{
-			printf("File could not be opened\n");
+			printf("ファイルを開けませんでした\n");
 			return -1;
 		}
 	}
@@ -65,7 +65,7 @@ int getfd(char* arg)
 	}
 	else
 	{
-		printf("Invalid formatting in argument \"%s\"\n", arg);
+		printf("引数 \"%s\" の書式が不正です\n", arg);
 		return -1;
 	}
 
@@ -77,7 +77,7 @@ struct fileComp* comparefds(int fd1, int fd2)
 	struct fileComp* fc = malloc(sizeof(struct fileComp));
 	if(!fc)
 	{
-		printf("Could not allocate space for file contents\n");
+		printf("ファイルの内容用の領域を確保できませんでした\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -90,7 +90,7 @@ struct fileComp* comparefds(int fd1, int fd2)
 char* securityCheck(char* arg, char* s)
 {
 	if(strstr(arg, ".pass"))
-		return "<<<For security reasons, your filename has been blocked>>>";
+		return "<<<セキュリティ上の理由により、ファイル名はブロックされました>>>";
 	return s;
 }
 
@@ -98,10 +98,10 @@ int main(int argc, char** argv)
 {
 	if(argc != 3)
 	{
-		printf("Hi. This program will do a lexicographical comparison of the \
-contents of two files. It has the bonus functionality of being \
-able to process either filenames or file descriptors.\n");
-		printf("Usage: %s {-fn=<filename>|-fd=<file_descriptor>} {-fn=<filename>|-fd=<file_descriptor>}\n", argv[0]);
+		printf("こんにちは。このプログラムは、2 つのファイルの内容を \
+辞書順で比較します。おまけの機能として、ファイル名と \
+ファイルディスクリプタのどちらでも処理できます。\n");
+		printf("使い方: %s {-fn=<ファイル名>|-fd=<ファイルディスクリプタ>} {-fn=<ファイル名>|-fd=<ファイルディスクリプタ>}\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
@@ -109,23 +109,23 @@ able to process either filenames or file descriptors.\n");
 	int fd2 = getfd(argv[2]);
 	if(fd1 == -1 || fd2 == -1)
 	{
-		printf("Usage: %s {-fn=<filename>|-fd=<file_descriptor>} {-fn=<filename>|-fd=<file_descriptor>}\n", argv[0]);
+		printf("使い方: %s {-fn=<ファイル名>|-fd=<ファイルディスクリプタ>} {-fn=<ファイル名>|-fd=<ファイルディスクリプタ>}\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 	if(fd1 == 0 || fd2 == 0)
 	{
-		printf("Invalid fd argument.\n");
-		printf("(We're still fixing some bugs with using STDIN.)\n");
-		printf("Usage: %s {-fn=<filename>|-fd=<file_descriptor>} {-fn=<filename>|-fd=<file_descriptor>}\n", argv[0]);
+		printf("fd 引数が不正です。\n");
+		printf("(STDIN の利用に関するバグを、まだ修正中です。)\n");
+		printf("使い方: %s {-fn=<ファイル名>|-fd=<ファイルディスクリプタ>} {-fn=<ファイル名>|-fd=<ファイルディスクリプタ>}\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
 	struct fileComp* fc = comparefds(fd1, fd2);
 	
 	printf(
-			"\"%s\" is lexicographically %s \"%s\"\n", 
+			"辞書順の比較: \"%s\" は %s \"%s\"\n", 
 			securityCheck(argv[1], fc->fileContents1),
-			fc->cmp > 0 ? "after" : (fc->cmp < 0 ? "before" : "equivalent to"),
+			fc->cmp > 0 ? "後 (after)" : (fc->cmp < 0 ? "前 (before)" : "等しい (equivalent to)"),
 			securityCheck(argv[2], fc->fileContents2));
 
 	return EXIT_SUCCESS;

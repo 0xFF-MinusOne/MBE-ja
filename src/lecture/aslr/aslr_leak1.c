@@ -1,9 +1,9 @@
 /*
-Exploitation with ASLR Enabled
-Lecture: Example 1
+ASLR 有効下でのエクスプロイト
+講義: 例 1
 Modern Binary Exploitation
 
-Compiled with:
+コンパイル方法:
 gcc -pie -fPIE -fno-stack-protector -o aslr_leak1 aslr_leak1.c
 
 -Patrick Biernat
@@ -13,14 +13,14 @@ gcc -pie -fPIE -fno-stack-protector -o aslr_leak1 aslr_leak1.c
 
 void i_am_rly_leet() 
 {
-    printf("You found me!\nGood job!\n");
+    printf("見つけましたね!\nよくできました!\n");
     return;
 }
 
 int main(int argc, char** argv)
 {
     char my_string[16];
-    printf("Win Func @ %p\n",i_am_rly_leet);
+    printf("Win 関数 @ %p\n",i_am_rly_leet);
     fflush(stdout);
     fgets(my_string,40,stdin);
     

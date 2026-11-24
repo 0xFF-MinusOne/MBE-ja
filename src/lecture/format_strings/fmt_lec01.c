@@ -1,5 +1,5 @@
 /*
- * Format Strings Example 1
+ * 書式文字列の例 1
  *
  */
 #include <stdio.h>

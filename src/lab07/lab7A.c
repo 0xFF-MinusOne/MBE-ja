@@ -1,4 +1,4 @@
-/* compiled with: gcc -static -z relro -z now -fstack-protector-all -o lab7A lab7A.c */
+/* コンパイル方法: gcc -static -z relro -z now -fstack-protector-all -o lab7A lab7A.c */
 
 #include <stdio.h>
 #include <string.h>
@@ -22,7 +22,7 @@ struct msg {
 
 struct msg * messages[MAX_MSG];
 
-/* apply one time pad */
+/* ワンタイムパッドを適用する */
 void encdec_message(unsigned int * message, unsigned int * xor_pad)
 {
     int i = 0;
@@ -30,7 +30,7 @@ void encdec_message(unsigned int * message, unsigned int * xor_pad)
         message[i] ^= xor_pad[i];
 }
 
-/* print information about the given message */
+/* 指定されたメッセージの情報を表示する */
 void print_message(struct msg * to_print)
 {
     unsigned int i = 0;
@@ -40,8 +40,8 @@ void print_message(struct msg * to_print)
     xor_pad = (char *)&to_print->xor_pad;
     message = (char *)&to_print->message;
 
-    /* print the message's xor pad */
-    printf("\nXOR Pad: \n"
+    /* メッセージの XOR パッドを表示する */
+    printf("\nXOR パッド: \n"
            "-----------------------------------------\n");
 
     for(i = 0; i < BLOCK_SIZE*MAX_BLOCKS; i++)
@@ -51,8 +51,8 @@ void print_message(struct msg * to_print)
             puts("");
     }
 
-    /* print encrypted message */
-    printf("\nEncrypted Message: \n"
+    /* 暗号化されたメッセージを表示する */
+    printf("\n暗号化されたメッセージ: \n"
            "-----------------------------------------\n");
 
     for(i = 0; i < BLOCK_SIZE*MAX_BLOCKS; i++)
@@ -65,27 +65,27 @@ void print_message(struct msg * to_print)
     puts("");
 }
 
-/* creates a message */
+/* メッセージを作成する */
 int create_message()
 {
     int i, j;
     struct msg * new_msg = NULL;
 
-    /* find a free message slot */
+    /* 空いているメッセージスロットを探す */
     for(i = 0; i < MAX_MSG; i++)
         if(messages[i] == NULL)
             break;
 
-    /* make sure we actually found an empty slot */
+    /* 本当に空きスロットが見つかったことを確認する */
     if(messages[i])
     {
-        printf("-No message slots left!\n");
+        printf("-メッセージスロットが残っていません!\n");
         return 1;
     }
 
-    printf("-Using message slot #%u\n", i);
+    printf("-メッセージスロット #%u を使います\n", i);
 
-    /* initialize new message */
+    /* 新しいメッセージを初期化する */
     new_msg = malloc(sizeof(struct msg));
     memset(new_msg, 0, sizeof(struct msg));
     new_msg->print_msg = &print_message;
@@ -93,30 +93,30 @@ int create_message()
     for(j = 0; j < MAX_BLOCKS; j++)
         new_msg->xor_pad[j] = rand();
 
-    /* get the length of data the user intends to encrypt */
-    printf("-Enter data length: ");
+    /* ユーザーが暗号化しようとしているデータの長さを取得する */
+    printf("-データの長さを入力してください: ");
 
     new_msg->msg_len = get_unum();
 
     if(new_msg->msg_len == 0)
     {
-        printf("-Message length must be greater than zero!\n");
+        printf("-メッセージの長さは 0 より大きくなければなりません!\n");
         free(new_msg);
         return 1;
     }
 
-    /* make sure the message length is no bigger than the xor pad */
+    /* メッセージの長さが XOR パッドより大きくないことを確認する */
     if((new_msg->msg_len / BLOCK_SIZE) > MAX_BLOCKS)
         new_msg->msg_len = BLOCK_SIZE * MAX_BLOCKS;
 
-    /* read in the message to encrypt with the xor pad */
-    printf("-Enter data to encrypt: ");
+    /* XOR パッドで暗号化するメッセージを読み込む */
+    printf("-暗号化するデータを入力してください: ");
     read(0, &new_msg->message, new_msg->msg_len);
 
-    /* encrypt message */
+    /* メッセージを暗号化する */
     encdec_message(new_msg->message, new_msg->xor_pad);
 
-    /* save the new message to the global list */
+    /* 新しいメッセージをグローバルなリストに保存する */
     messages[i] = new_msg;
 
     return 0;
@@ -127,47 +127,47 @@ int edit_message()
     char numbuf[32];
     unsigned int i = 0;
 
-    /* get message index to destroy */
-    printf("-Input message index to edit: ");
+    /* 対象のメッセージのインデックスを取得する */
+    printf("-編集するメッセージのインデックスを入力してください: ");
     fgets(numbuf, sizeof(numbuf), stdin);
     i = strtoul(numbuf, NULL, 10);
 
     if(i >= MAX_MSG || messages[i] == NULL)
     {
-        printf("-Invalid message index!\n");
+        printf("-メッセージのインデックスが不正です!\n");
         return 1;
     }
 
-    printf("-Input new message to encrypt: ");
+    printf("-暗号化する新しいメッセージを入力してください: ");
 
-    /* clear old message, and read in a new one */
+    /* 古いメッセージを消去して、新しいメッセージを読み込む */
     memset(&messages[i]->message, 0, BLOCK_SIZE * MAX_BLOCKS);
     read(0, &messages[i]->message, messages[i]->msg_len);
 
-    /* encrypt message */
+    /* メッセージを暗号化する */
     encdec_message(messages[i]->message, messages[i]->xor_pad);
 
     return 0;
 }
 
-/* free a secure message */
+/* 安全なメッセージを解放する */
 int destroy_message()
 {
     char numbuf[32];
     unsigned int i = 0;
 
-    /* get message index to destroy */
-    printf("-Input message index to destroy: ");
+    /* 対象のメッセージのインデックスを取得する */
+    printf("-破棄するメッセージのインデックスを入力してください: ");
     fgets(numbuf, sizeof(numbuf), stdin);
     i = strtoul(numbuf, NULL, 10);
 
     if(i >= MAX_MSG || messages[i] == NULL)
     {
-        printf("-Invalid message index!\n");
+        printf("-メッセージのインデックスが不正です!\n");
         return 1;
     }
 
-    /* destroy message */
+    /* メッセージを破棄する */
     memset(messages[i], 0, sizeof(struct msg));
     free(messages[i]);
     messages[i] = NULL;
@@ -175,42 +175,42 @@ int destroy_message()
     return 0;
 }
 
-/* print a message at a select index */
+/* 選択したインデックスのメッセージを表示する */
 int print_index()
 {
     char numbuf[32];
     unsigned int i = 0;
 
-    /* get message index to print */
-    printf("-Input message index to print: ");
+    /* 表示するメッセージのインデックスを取得する */
+    printf("-表示するメッセージのインデックスを入力してください: ");
     fgets(numbuf, sizeof(numbuf), stdin);
     i = strtoul(numbuf, NULL, 10);
 
     if(i >= MAX_MSG || messages[i] == NULL)
     {
-        printf("-Invalid message index!\n");
+        printf("-メッセージのインデックスが不正です!\n");
         return 1;
     }
 
-    /* print the message of interest */
+    /* 対象のメッセージを表示する */
     messages[i]->print_msg(messages[i]);
 
     return 0;
 }
 
-/* the vulnerability is in here */
+/* 脆弱性はこの中にあります */
 void print_menu()
 {
     printf("+---------------------------------------+\n"
-           "|        Doom's OTP Service v1.0        |\n"
+           "|       Doom の OTP サービス v1.0       |\n"
            "+---------------------------------------+\n"
-           "|------------ Services Menu ------------|\n"
+           "|---------- サービスメニュー -----------|\n"
            "|---------------------------------------|\n"
-           "| 1. Create secure message              |\n"
-           "| 2. Edit secure message                |\n"
-           "| 3. Destroy secure message             |\n"
-           "| 4. Print message details              |\n"
-           "| 5. Quit                               |\n"
+           "| 1. 安全なメッセージを作成する         |\n"
+           "| 2. 安全なメッセージを編集する         |\n"
+           "| 3. 安全なメッセージを破棄する         |\n"
+           "| 4. メッセージの詳細を表示する         |\n"
+           "| 5. 終了する                           |\n"
            "+---------------------------------------+\n");
 }
 
@@ -224,50 +224,50 @@ int main()
     {
         print_menu();
 
-        /* get menu option */
-        printf("Enter Choice: ");
+        /* メニューの選択肢を取得する */
+        printf("選択してください: ");
         choice = get_unum();
 
         printf("-----------------------------------------\n");
 
-        /* handle menu selection */
+        /* メニューの選択を処理する */
         if(choice == 1)
         {
             if(create_message())
-                printf("-Failed to create message!\n");
+                printf("-メッセージの作成に失敗しました!\n");
             else
-                printf("-Message created successfully!\n");
+                printf("-メッセージを作成しました!\n");
         }
         else if(choice == 2)
         {
             if(edit_message())
-                printf("-Failed to edit message!\n");
+                printf("-メッセージの編集に失敗しました!\n");
             else
-                printf("-Message has been successfully modified!\n");
+                printf("-メッセージを変更しました!\n");
         }
         else if(choice == 3)
         {
             if(destroy_message())
-                printf("-Failed to destroy message!\n");
+                printf("-メッセージの破棄に失敗しました!\n");
             else
-                printf("-Message destroyed!\n");
+                printf("-メッセージを破棄しました!\n");
         }
         else if(choice == 4)
         {
             if(print_index())
-                printf("-Failed to print message!\n");
+                printf("-メッセージの表示に失敗しました!\n");
         }
         else if(choice == 5)
         {
-            break;  // exit
+            break;  // 終了
         }
         else
-            printf("-Invalid choice!\n");
+            printf("-選択肢が不正です!\n");
 
         choice = 0;
         puts("");
     }
 
-    printf("See you tomorrow!\n");
+    printf("また明日!\n");
     return EXIT_SUCCESS;
 }

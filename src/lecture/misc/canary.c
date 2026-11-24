@@ -11,7 +11,7 @@ void contrivedLeak() {
 }
 
 void contrivedOverflow() {
-    printf("\n..I like to read ^_^ <==  ");
+    printf("\n..読書が好きなんです ^_^ <==  ");
     char buf[24];
     read(STDIN, buf, 48);
     char lolz[24];
@@ -22,12 +22,12 @@ void contrivedOverflow() {
 
 int main(int argc, char* argv[]) {
     setbuf(stdout, NULL);
-    printf("What you give, you will get back\n");
-    printf("==> white elephants: ");
+    printf("与えたものが返ってきます\n");
+    printf("==> 無用の長物: ");
     contrivedLeak();
-    printf("\nYou're lucky numbers are 512 and 1024\n");
+    printf("\nあなたのラッキーナンバーは 512 と 1024 です\n");
     contrivedOverflow();
-    printf("\n\nWoah There\n");
+    printf("\n\nおっと、待った\n");
     return 0;
 
 }

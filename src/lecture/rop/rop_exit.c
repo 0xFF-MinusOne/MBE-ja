@@ -4,10 +4,10 @@ int main()
 {
     char buffer[128] = {0};
 
-    /* break stuff */
-    printf("insert ropchain: ");
+    /* 色々なものを壊す */
+    printf("ROP チェーンを入力してください: ");
     gets(buffer);
     
-    /* program always returns 0 */
+    /* プログラムは常に 0 を返す */
     return 0;
 }

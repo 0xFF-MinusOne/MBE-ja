@@ -1,4 +1,4 @@
-/* compiled with: gcc -o sizes sizes.c */
+/* コンパイル方法: gcc -o sizes sizes.c */
 
 #include <stdio.h>
 #include <unistd.h>
@@ -11,13 +11,13 @@ int main()
     unsigned int * ptr[10];
     int i;
    
-    /* make arbitrary chunks on the heap */
+    /* ヒープ上に任意のチャンクを作る */
     for(i = 0; i < 10; i++)
         ptr[i] = malloc(lengths[i]);
    
-    /* print distance between chunks, eg size of chunks */
+    /* チャンク間の距離、つまりチャンクのサイズを表示する */
     for(i = 0; i < 9; i++)
-        printf("malloc(%2d) is at 0x%08x, %3d bytes to the next pointer\n", 
+        printf("malloc(%2d) は 0x%08x にあり、次のポインタまで %3d バイトです\n", 
                 lengths[i],
                 (unsigned int)ptr[i],
                 (ptr[i+1]-ptr[i])*sizeof(unsigned int));

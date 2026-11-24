@@ -8,10 +8,10 @@
 int *global_addr;
 int *global_addr_check;
 
-// made so you can only read what we let you
+// こちらが許可したものしか読めないように作ってあります
 
 void selectABook() {
-    /* Our Apologies,the interface is currently under developement */
+    /* 申し訳ありません。インターフェースは現在開発中です */
     char buf_secure[512];
     scanf("%s", buf_secure);
     printf(buf_secure);
@@ -22,10 +22,10 @@ void selectABook() {
     }else if(*buf_secure == '\x00'){
         readC();
     }else if(buf_secure == 1337){
-        printf("\nhackers dont have time to read.\n");
+        printf("\nハッカーには読書する時間なんてないんだよ。\n");
         exit(EXIT_FAILURE);
     }else{
-        printf("\nWhat were you thinking, that isn't a good book.");
+        printf("\n何を考えているんですか、それは良い本ではありません。");
         selectABook();
     }
     return;
@@ -63,24 +63,24 @@ void readC(){
 }
 
 void findSomeWords() {
-    /* We specialize in words of wisdom */
+    /* 私たちは知恵の言葉を専門にしています */
     char buf[24];
-    // to avoid the null
+    // null を避けるため
     global_addr = (&buf+0x1);
-    // have to make sure no one is stealing the librarians cookies (they get angry)
+    // 誰も司書さんのクッキーを盗んでいないか確かめないといけない (怒るので)
     global_addr_check = global_addr-0x2;
     char lolz[4];
 
-    printf("\n..I like to read ^_^ <==  ");
-    read(STDIN, buf, 2048); // >> read a lot every day !
+    printf("\n..読書が好きなんです ^_^ <==  ");
+    read(STDIN, buf, 2048); // >> 毎日たくさん読むのです!
 
     if(((*( global_addr))^(*(global_addr_check))) != ((*( global_addr))^(0xdeadbeef))){
-        printf("\n\nWoah There\n");
-        // why are you trying to break my program q-q
+        printf("\n\nおっと、待った\n");
+        // どうして私のプログラムを壊そうとするのですか q-q
         exit(EXIT_FAILURE);
     }
 
-    // protected by my CUSTOM cookie - so soooo safe now
+    // 私の独自のクッキーで保護されている - これでとてもとても安全
     return;
 }
 
@@ -89,16 +89,16 @@ int main(int argc, char* argv[]) {
     disable_buffering(stdout);
     printf("\n\n\n");
     printf("**********************************************\n"\
-           "{|}  Welcome to QUEND's Beta-Book-Browser  {|}\n"\
+           "{|} QUEND のベータ版ブックブラウザへようこそ {|}\n"\
            "**********************************************\n"\
            "\n"
-           "\t==> reading is for everyone <==\n"\
-           "\t[+] Enter Your Favorite Author's Last Name: ");
+           "\t==> 読書はみんなのもの <==\n"\
+           "\t[+] 好きな著者の姓を入力してください: ");
     selectABook();
 
-    printf("\n...please turn to page 394...\n");
+    printf("\n...394 ページを開いてください...\n");
     findSomeWords();
 
-    printf("\n\t[===] Whew you made it !\n\n");
+    printf("\n\t[===] ふう、やりましたね!\n\n");
     return EXIT_SUCCESS;
 }

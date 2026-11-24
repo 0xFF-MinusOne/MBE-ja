@@ -1,10 +1,9 @@
-Project one is representative of what you might see in the average 200 point
-CTF challenge. There is no source provided and you’re expected to do some
-reverse engineering with IDA. Through reversing and playing around with the
-challenge, you will likely find the issues and vulnerabilities you can leverage
-to take control of the challenge.
+プロジェクト 1 は、平均的な 200 点クラスの CTF の課題で出会うようなものを想定しています。
+ソースコードは提供されません。IDA を使ったリバースエンジニアリングが必要です。
+リバースエンジニアリングと課題での試行錯誤を通じて、課題を乗っ取るために使える問題点や
+脆弱性が見つかるはずです。
 
-The end goal is like any of labs. There’s a secret .pass file in the privileged
-project1 account, and we would like you to extract it.
+最終目標は、どのラボとも同じです。権限のある project1 アカウントに秘密の .pass ファイルがあります。
+それを取り出してください。
 
-Good luck.
+幸運を祈ります。

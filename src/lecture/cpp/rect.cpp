@@ -27,11 +27,11 @@ main(int argc, char *argv[])
 
     int *vars = (int *)&r;
 
-    printf("width = %d, height = %d\n", vars[0], vars[1]);
+    printf("幅 = %d, 高さ = %d\n", vars[0], vars[1]);
 
     r.set_vals(10, 24);
     printf("setvals(10, 24);\n");
-    printf("width = %d, height = %d\n", vars[0], vars[1]);
+    printf("幅 = %d, 高さ = %d\n", vars[0], vars[1]);
 
     return 0;
 }

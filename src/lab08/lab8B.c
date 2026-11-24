@@ -32,23 +32,23 @@ void printMenu()
 {
 	printf("+------------------------------------------------------------+\n");
 	printf("|                                                            |\n");
-	printf("|  1. Enter data                                          :> |\n");
-	printf("|  2. Sum vectors                                         :] |\n");
-	printf("|  3. Print vector                                        :3 |\n");
-	printf("|  4. Save sum to favorites                               8) |\n");
-	printf("|  5. Print favorites                                     :O |\n");
-	printf("|  6. Load favorite                                       :$ |\n");
-	printf("|  9. Get help                                            :D |\n");
+	printf("|  1. データを入力する                                    :> |\n");
+	printf("|  2. ベクトルを合計する                                  :] |\n");
+	printf("|  3. ベクトルを表示する                                  :3 |\n");
+	printf("|  4. 合計をお気に入りに保存する                          8) |\n");
+	printf("|  5. お気に入りを表示する                                :O |\n");
+	printf("|  6. お気に入りを読み込む                                :$ |\n");
+	printf("|  9. ヘルプを表示する                                    :D |\n");
 	printf("|                                                            |\n");
 	printf("+------------------------------------------------------------+\n");
-	printf("I COMMAND YOU TO ENTER YOUR COMMAND: ");
+	printf("コマンドを入力せよ: ");
 }
 
 struct vector* vectorSel()
 {
-	printf("Which vector? ");
+	printf("どのベクトルですか? ");
 	char sel;
-	while((sel = getchar()) == '\n'); // I love C.
+	while((sel = getchar()) == '\n'); // C が大好きだ。
 	switch(sel)
 	{
 		case '1':
@@ -58,7 +58,7 @@ struct vector* vectorSel()
 		case '3':
 			return &v3;
 		default:
-			printf("\nBAD VECTOR SELECTION\n");
+			printf("\nベクトルの選択が不正です\n");
 			exit(EXIT_FAILURE);
 	}
 }
@@ -68,12 +68,12 @@ void enterData()
 	struct vector* v = vectorSel();
 	if(v == &v3)
 	{
-		printf("Please don't try to manually enter data into the sum.\n");
+		printf("合計に手動でデータを入力しようとしないでください。\n");
 		return;
 	}
-	printf("Data entry time!\n");
+	printf("データ入力の時間です!\n");
 	printf("char a: ");
-	while((v->a = getchar()) == '\n'); // Still love C.
+	while((v->a = getchar()) == '\n'); // やっぱり C が大好きだ。
 	printf("short b: ");
 	scanf("%hd", &(v->b));
 	printf("unsigned short c: ");
@@ -105,7 +105,7 @@ void sumVectors()
 			v1.h==0 || v2.h==0 ||
 			v1.i==0 || v2.i==0)
 	{
-		printf("You didn't even set the addends... :(\n");
+		printf("加数すら設定していませんね... :(\n");
 		return;
 	}
 	v3.a = v1.a + v2.a;
@@ -117,11 +117,11 @@ void sumVectors()
 	v3.g = v1.g + v2.g;
 	v3.h = v1.h + v2.h;
 	v3.i = v1.i + v2.i;
-	printf("Summed.\n");
+	printf("合計しました。\n");
 }
 
 /*
- * Bonus points if you don't use this function.
+ * この関数を使わなければボーナスポイント。
  */
 void thisIsASecret()
 {
@@ -130,7 +130,7 @@ void thisIsASecret()
 
 void printVector(struct vector* v)
 {
-	printf("Address: %p\n", v);
+	printf("アドレス: %p\n", v);
 	printf("void printFunc: %p\n", v->printFunc);
 	printf("char a: %c\n", v->a);
 	printf("short b: %hd\n", v->b);
@@ -150,13 +150,13 @@ void fave()
 		if(!faves[i])
 			break;
 	if(i == MAX_FAVES)
-		printf("You have too many favorites.\n");
+		printf("お気に入りが多すぎます。\n");
 	else
 	{
 		faves[i] = malloc(sizeof(struct vector));
 		memcpy(faves[i], (int*)(&v3)+i, sizeof(struct vector));
-		printf("I see you added that vector to your favorites, \
-but was it really your favorite?\n");
+		printf("そのベクトルをお気に入りに追加したのですね。 \
+でも、本当にお気に入りでしたか?\n");
 	}
 }
 
@@ -168,24 +168,24 @@ void printFaves()
 			printVector(faves[i]);
 		else
 			break;
-	printf("Printed %u vectors.\n", i);
+	printf("%u 個のベクトルを表示しました。\n", i);
 }
 
 void loadFave()
 {
-	printf("Which favorite? ");
+	printf("どのお気に入りですか? ");
 	unsigned int i;
 	scanf("%u", &i);
 	if(i >= MAX_FAVES)
 	{
-		printf("Index out of bounds\n");
+		printf("インデックスが範囲外です\n");
 		return;
 	}
 
 	struct vector* v = vectorSel();
 	if(v == &v3)
 	{
-		printf("Please don't try to manually enter data into the sum.\n");
+		printf("合計に手動でデータを入力しようとしないでください。\n");
 		return;
 	}
 	memcpy(v, faves[i], sizeof(v));
@@ -194,9 +194,9 @@ void loadFave()
 void help()
 {
 	printf("\
-This program adds two vectors together and stores it in a third vector. You \
-can then add the sum to your list of favorites, or load a favorite back into \
-one of the addends.\n");
+このプログラムは、2 つのベクトルを足し合わせて、結果を 3 つ目のベクトルに保存します。 \
+その合計をお気に入りのリストに追加したり、お気に入りを加数の一方に \
+読み込み直したりできます。\n");
 }
 
 int main(int argc, char** argv)
@@ -207,7 +207,7 @@ int main(int argc, char** argv)
 	v2.printFunc = printf;
 	v3.printFunc = printf;
 	struct vector* v;
-	while((sel = getchar()) && (sel == '\n' || getchar())) // Magic ;^)
+	while((sel = getchar()) && (sel == '\n' || getchar())) // 魔法 ;^)
 	{
 		if(sel == '\n')
 			continue;
@@ -215,7 +215,7 @@ int main(int argc, char** argv)
 		switch(sel)
 		{
 			case '0':
-				printf("OK, bye.\n");
+				printf("では、さようなら。\n");
 				return EXIT_SUCCESS;
 			case '1':
 				enterData();
@@ -241,8 +241,8 @@ int main(int argc, char** argv)
 				help();
 				break;
 			default:
-				printf("\nThat was bad input. \
-Just like your futile attempt to pwn this.\n"); 
+				printf("\n不正な入力です。 \
+これを pwn しようとするあなたの無駄な試みと同じです。\n"); 
 				return EXIT_FAILURE;
 		}
 		printMenu();

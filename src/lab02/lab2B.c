@@ -3,7 +3,7 @@
 #include <string.h>
 
 /*
- * compiled with:
+ * コンパイル方法:
  * gcc -O0 -fno-stack-protector lab2B.c -o lab2B
  */
 
@@ -18,14 +18,14 @@ void print_name(char* input)
 {
 	char buf[15];
 	strcpy(buf, input);
-	printf("Hello %s\n", buf);
+	printf("こんにちは、%s\n", buf);
 }
 
 int main(int argc, char** argv)
 {
 	if(argc != 2)
 	{
-		printf("usage:\n%s string\n", argv[0]);
+		printf("使い方:\n%s 文字列\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 

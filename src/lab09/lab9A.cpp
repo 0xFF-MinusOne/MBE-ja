@@ -1,8 +1,8 @@
 /*
- * compile: g++ -fstack-protector-all -z relro -z now -O1 -fPIE -pie ./lab9A.cpp -g -o lab9A
- * clark's improved item storage server!
- * Changelog:
- *   * Using HashSets for insta-access!
+ * コンパイル方法: g++ -fstack-protector-all -z relro -z now -O1 -fPIE -pie ./lab9A.cpp -g -o lab9A
+ * clark の改良版アイテム保管サーバーです!
+ * 変更履歴:
+ *   * HashSet を使って、即座にアクセスできるようにしました!
  *
 */
 
@@ -19,29 +19,29 @@ ENABLE_TIMEOUT(300)
 void
 print_menu(void)
 {
-    printf("+----------- clark's improved item storage -----------+\n"
-           "| [ -- Now using HashSets for insta-access to items!  |\n"
-           "| 1. Open a lockbox                                   |\n"
-           "| 2. Add an item to a lockbox                         |\n"
-           "| 3. Get an item from a lockbox                       |\n"
-           "| 4. Destroy your lockbox and items in it             |\n"
-           "| 5. Exit                                             |\n"
+    printf("+------------ clark の改良版アイテム保管 -------------+\n"
+           "| [ -- アイテムへ即座にアクセス: HashSet を採用!|\n"
+           "| 1. ロックボックスを開く                             |\n"
+           "| 2. ロックボックスにアイテムを追加する               |\n"
+           "| 3. ロックボックスからアイテムを取り出す             |\n"
+           "| 4. ロックボックスと中のアイテムを破棄する           |\n"
+           "| 5. 終了する                                         |\n"
            "+-----------------------------------------------------+\n");
 }
 
-/********* Storage implementation **********/
+/********* ストレージの実装 **********/
 
-// hash functor
+// ハッシュ関数オブジェクト (functor)
 class hash_num {
     public:
-        // I'm no mathematician
+        // 私は数学者ではないので
         unsigned int
         operator() (unsigned int const &key) const {
             return key;
         }
 };
 
-// Hashset
+// ハッシュセット (HashSet)
 template<class T, class HashFunc>
 class HashSet {
     public:
@@ -77,28 +77,28 @@ T
 HashSet<T, HashFunc>::get(unsigned int index)
 {
     if (index >= m_size) {
-        std::cout << "Invalid index" << std::endl;
+        std::cout << "インデックスが不正です" << std::endl;
         return T();
     }
     return set_data[index];
 }
 
-/********* Storage interface implementation **********/
+/********* ストレージのインターフェースの実装 **********/
 void
 do_new_set(hashset_int **set_vec)
 {
     int bin = -1;
     int choice = -1;
-    std::cout << "Which lockbox do you want?: ";
+    std::cout << "どのロックボックスにしますか?: ";
     bin = get_unum();
     if (bin < 0) {
-        std::cout << "Invalid set ID!" << std::endl;
+        std::cout << "セット ID が不正です!" << std::endl;
         return;
     } else if (bin >= SIZE_HASHSET_VEC) {
-        std::cout << "No more room!" << std::endl;
+        std::cout << "空きがありません!" << std::endl;
         return;
     }
-    std::cout << "How many items will you store?: ";
+    std::cout << "いくつのアイテムを保存しますか?: ";
     choice = get_unum();
     set_vec[bin] = new hashset_int(choice);
 }
@@ -109,14 +109,14 @@ do_add_item(hashset_int **set_vec)
     int set_id = -1;
     int item_val = -1;
 
-    std::cout << "Which lockbox?: ";
+    std::cout << "どのロックボックスですか?: ";
     set_id = get_unum();
     if (set_id < 0 || set_id >= SIZE_HASHSET_VEC) {
-        std::cout << "Invalid set ID!" << std::endl;
+        std::cout << "セット ID が不正です!" << std::endl;
         return;
     }
 
-    std::cout << "Item value: ";
+    std::cout << "アイテムの値: ";
     item_val = get_unum();
     set_vec[set_id]->add(item_val);
 }
@@ -128,20 +128,20 @@ do_find_item(hashset_int **set_vec)
     int item_val = -1;
     int item_index = -1;
 
-    std::cout << "Which lockbox?: ";
+    std::cout << "どのロックボックスですか?: ";
     set_id = get_unum();
     if (set_id < 0 || set_id >= SIZE_HASHSET_VEC) {
-        std::cout << "Invalid set ID!" << std::endl;
+        std::cout << "セット ID が不正です!" << std::endl;
         return;
     }
 
-    std::cout << "Item value: ";
+    std::cout << "アイテムの値: ";
     item_val = get_unum();
     item_index = set_vec[set_id]->find(item_val);
     if (item_index == -1) {
-        std::cout << "Item not found!" << std::endl;
+        std::cout << "アイテムが見つかりません!" << std::endl;
     } else {
-        std::cout << "Item Found" << std::endl;
+        std::cout << "アイテムが見つかりました" << std::endl;
         printf("lockbox[%d] = %d\n", item_index, set_vec[set_id]->get(item_index));
     }
 }
@@ -150,10 +150,10 @@ void
 do_del_set(hashset_int **set_vec)
 {
     int del_id;
-    std::cout << "Which set?: ";
+    std::cout << "どのセットですか?: ";
     del_id = get_unum();
     if (del_id < 0 || del_id >= SIZE_HASHSET_VEC) {
-        std::cout << "Invalid ID!" << std::endl;
+        std::cout << "ID が不正です!" << std::endl;
         return;
      }
     delete set_vec[del_id];
@@ -169,7 +169,7 @@ main(int argc, char *argv[])
 
     while (!done) {
         print_menu();
-        std::cout << "Enter choice: ";
+        std::cout << "選択してください: ";
         choice = get_unum();
         switch (choice) {
         case 1:
@@ -188,7 +188,7 @@ main(int argc, char *argv[])
             done = true;
             break;
         default:
-            puts("Invalid option!");
+            puts("オプションが不正です!");
             break;
         }
     }

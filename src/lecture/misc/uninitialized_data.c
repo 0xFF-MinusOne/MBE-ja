@@ -14,14 +14,14 @@ void escape(char* cmd)
 int do_auth(void)
 {
 	char username[MAX_USER], password[MAX_PASS];
-	fprintf(stdout, "Please enter your username: ");
+	fprintf(stdout, "ユーザー名を入力してください: ");
 	fgets(username, MAX_USER, stdin);
 	fflush(stdin);
-	fprintf(stdout, "Please enter your password: ");
+	fprintf(stdout, "パスワードを入力してください: ");
 	fgets(password, MAX_PASS, stdin);
 #ifdef DEBUG
-	fprintf(stderr, "Username is at: 0x%08x (%d)\n", &username, strlen(username));
-	fprintf(stderr, "Password is at: 0x%08x (%d)\n", &password, strlen(password));
+	fprintf(stderr, "ユーザー名の位置: 0x%08x (%d)\n", &username, strlen(username));
+	fprintf(stderr, "パスワードの位置: 0x%08x (%d)\n", &password, strlen(password));
 #endif
 	if(!strcmp(username, "user") && !strcmp(password, "washere"))
 	{
@@ -34,8 +34,8 @@ int log_error(int farray, char *msg)
 	char *err, *mesg;
 	char buffer[24];
 #ifdef DEBUG
-	fprintf(stderr, "Mesg is at: 0x%08x\n", &mesg);
-	fprintf(stderr, "Mesg is pointing at: 0x%08x\n", mesg);
+	fprintf(stderr, "Mesg の位置: 0x%08x\n", &mesg);
+	fprintf(stderr, "Mesg の指す先: 0x%08x\n", mesg);
 #endif
 	memset(buffer, 0x00, sizeof(buffer));
 	sprintf(buffer, "Error: %s", mesg);
@@ -47,7 +47,7 @@ int main(void)
 	switch(do_auth())
 	{
 		case -1:
-			log_error(ERR_CRITIC | ERR_AUTH, "Unable to login");
+			log_error(ERR_CRITIC | ERR_AUTH, "ログインできません");
 			break;
 		default:
 			break;

@@ -4,21 +4,21 @@
 
 class Foo {
 public:
-  virtual void greet() { printf("Foo says hi\n"); }
-  void me() { printf("Foo is best\n"); }
+  virtual void greet() { printf("Foo は「やあ」と言っています\n"); }
+  void me() { printf("Foo が最高です\n"); }
 };
 
 class Bar : public Foo {
 public:
-  virtual void greet() { printf("Bar says hi\n"); }
-  virtual void dismiss() { printf("Bar says bye\n"); }
-  void me() { printf("Bar is best\n"); }
+  virtual void greet() { printf("Bar は「やあ」と言っています\n"); }
+  virtual void dismiss() { printf("Bar は「さようなら」と言っています\n"); }
+  void me() { printf("Bar が最高です\n"); }
 };
 
 class Baz : public Bar {
 public:
-  void dismiss() { printf("Baz says bye \n"); }
-  void me() { printf("Baz is best\n"); }
+  void dismiss() { printf("Baz は「さようなら」と言っています \n"); }
+  void me() { printf("Baz が最高です\n"); }
 };
 
 int

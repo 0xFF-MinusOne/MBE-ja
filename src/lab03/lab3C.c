@@ -8,7 +8,7 @@ char a_user_name[100];
 
 int verify_user_name()
 {
-    puts("verifying username....\n");
+    puts("ユーザー名を検証中....\n");
     return strncmp(a_user_name, "rpisec", 6);
 }
 
@@ -22,26 +22,26 @@ int main()
     char a_user_pass[64] = {0};
     int x = 0;
 
-    /* prompt for the username - read 100 byes */
-    printf("********* ADMIN LOGIN PROMPT *********\n");
-    printf("Enter Username: ");
+    /* ユーザー名の入力を促す - 100 バイト読み込む */
+    printf("********* 管理者ログイン *********\n");
+    printf("ユーザー名を入力: ");
     fgets(a_user_name, 0x100, stdin);
 
-    /* verify input username */
+    /* 入力されたユーザー名を検証する */
     x = verify_user_name();
     if (x != 0){
-        puts("nope, incorrect username...\n");
+        puts("違います、ユーザー名が正しくありません...\n");
         return EXIT_FAILURE;
     }
 
-    /* prompt for admin password - read 64 bytes */
-    printf("Enter Password: \n");
+    /* 管理者パスワードの入力を促す - 64 バイト読み込む */
+    printf("パスワードを入力: \n");
     fgets(a_user_pass, 0x64, stdin);
 
-    /* verify input password */
+    /* 入力されたパスワードを検証する */
     x = verify_user_pass(a_user_pass);
     if (x == 0 || x != 0){
-        puts("nope, incorrect password...\n");
+        puts("違います、パスワードが正しくありません...\n");
         return EXIT_FAILURE;
     }
 

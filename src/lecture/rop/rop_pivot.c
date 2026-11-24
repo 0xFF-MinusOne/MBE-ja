@@ -9,21 +9,21 @@ int main(int argc, char * argv[])
 
     if(argc < 3)
     {
-        printf("I need two arguments\n");
-    	printf("Usage: %s [overwrite index] [overwrite address]\n", argv[0]);
+        printf("引数が 2 つ必要です\n");
+    	printf("使い方: %s [上書きするインデックス] [上書きするアドレス]\n", argv[0]);
         return 1;
     }
 
-    /* create a pivot scenario */
-    printf("Overwriting 0x%08x with 0x%08x\n", \
+    /* ピボットの状況を作る */
+    printf("0x%08x を 0x%08x で上書きします\n", \
 	overwrite[strtoul(argv[1], NULL, 10)], strtoul(argv[2], NULL, 10));
     overwrite[strtoul(argv[1], NULL, 10)] = strtoul(argv[2], NULL, 10);
 
-    /* read a rop chain */
-    printf("insert ropchain: ");
+    /* ROP チェーンを読み込む */
+    printf("ROP チェーンを入力してください: ");
     fgets(buffer, 128, stdin);
 
-    /* program always returns 0 */
+    /* プログラムは常に 0 を返す */
     return 0;
 }
 

@@ -1,5 +1,5 @@
 /*
- *    Credit: https://defuse.ca/exploiting-cpp-vtables.htm
+ *    出典: https://defuse.ca/exploiting-cpp-vtables.htm
  */
 
 #include <cstdlib>
@@ -27,7 +27,7 @@ class Greeter {
     public:
         virtual void sayHello(const char *name)
         {
-            printf("Hello, %s!\n", name);
+            printf("こんにちは、%s!\n", name);
         }
 };
 
@@ -38,11 +38,11 @@ int main(int argc, char **argv)
 {
     Greeter g;
     char buf[64];
-    printf("You must be 18 years or older to use this program. Are you? ");
+    printf("このプログラムを使うには 18 歳以上でなければなりません。あなたは 18 歳以上ですか? ");
 
     doNothing();
 
-    gets(buf); /* OVERFLOW */
+    gets(buf); /* オーバーフロー */
     if (strcmp(buf, "y") == 0) {
         greet(&g);
         return 0;
@@ -54,14 +54,14 @@ int main(int argc, char **argv)
 void greet(Greeter *greeter)
 {
     char name[100];
-    printf("What is your name? ");
+    printf("お名前は? ");
     fgets(name, 100, stdin);
     name[strlen(name)-1] = '\0';
     greeter->sayHello(name);
 }
 
-/* This exists just so that the compiler/linker needs to include
- * CommandExecutor's code, since otherwise it would be unused. */
+/* これは、コンパイラ/リンカに CommandExecutor のコードを含めさせるためだけに
+ * ある。そうしないと、そのコードは使われないままになってしまう。 */
 void doNothing()
 {
     CommandExecutor e;

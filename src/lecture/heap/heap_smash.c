@@ -10,17 +10,17 @@ struct toystr {
 
 void print_super(char * who)
 {
-    printf("%s is superrr cool......\n", who);
+    printf("%s はめちゃくちゃかっこいい......\n", who);
 }
 
 void print_cool(char * who)
 {
-    printf("%s is cool!\n", who);
+    printf("%s はかっこいい!\n", who);
 }
 
 void print_meh(char * who)
 {
-    printf("%s is meh...\n", who);
+    printf("%s はいまいち...\n", who);
 }
 
 int main(int argc, char * argv[])
@@ -34,11 +34,11 @@ int main(int argc, char * argv[])
     coolguy->message = &print_cool;
     lameguy->message = &print_meh;
   
-    printf("Input coolguy's name: ");
+    printf("coolguy の名前を入力してください: ");
     fgets(coolguy->buffer, 200, stdin);
     coolguy->buffer[strcspn(coolguy->buffer, "\n")] = 0;
 
-    printf("Input lameguy's name: ");
+    printf("lameguy の名前を入力してください: ");
     fgets(lameguy->buffer, 20, stdin);
     lameguy->buffer[strcspn(lameguy->buffer, "\n")] = 0;
 

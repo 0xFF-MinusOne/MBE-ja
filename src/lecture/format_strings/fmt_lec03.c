@@ -1,5 +1,5 @@
 /*
- * Format Strings Example 3
+ * 書式文字列の例 3
  *
  */
 #include <stdio.h>
@@ -14,14 +14,14 @@ main(int argc, char *argv[])
   fgets(buf, 100, stdin);
   printf(buf);
 
-  //HINT
+  //ヒント
   fprintf(stderr, "unchangeable @ %p\n", &unchangeable);
 
   if (unchangeable == 0xcafebabe) {
-    printf("Success!\n");
+    printf("成功!\n");
   } else {
-    printf("Failure!\n");
-    printf("unchangeable is %#x", unchangeable);
+    printf("失敗!\n");
+    printf("unchangeable は %#x です", unchangeable);
     exit(EXIT_FAILURE);
   }
 

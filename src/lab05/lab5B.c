@@ -8,7 +8,7 @@ int main()
 
     char buffer[128] = {0};
 
-    printf("Insert ROP chain here:\n");
+    printf("ここに ROP チェーンを入力してください:\n");
     gets(buffer);
 
     return EXIT_SUCCESS;

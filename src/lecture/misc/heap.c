@@ -1,5 +1,5 @@
 /*
- * This level is completed when you see the “you have logged in already!” message
+ * このレベルは、「すでにログインしています!」というメッセージが表示されたらクリアです
  * https://exploit-exercises.com/protostar/heap2/
  */
 
@@ -41,9 +41,9 @@ int main(int argc, char **argv)
       }
       if(strncmp(line, "login", 5) == 0) {
           if(auth->auth) {
-              printf("you have logged in already!\n");
+              printf("すでにログインしています!\n");
           } else {
-              printf("please enter your password\n");
+              printf("パスワードを入力してください\n");
           }
       }
   }

@@ -1,9 +1,9 @@
 /*
-Exploitation with ASLR Enabled
-Lecture: Example 2
+ASLR 有効下でのエクスプロイト
+講義: 例 2
 Modern Binary Exploitation
 
-Compiled with:
+コンパイル方法:
 gcc -m32  -fno-stack-protector -z execstack -static ./aslr2.c
 
 Patrick Biernat

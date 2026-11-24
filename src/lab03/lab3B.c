@@ -13,8 +13,8 @@ ENABLE_TIMEOUT(60)
 
 /* gcc -z execstack -fno-stack-protector -o lab3B lab3B.c */
 
-/* hint: write shellcode that opens and reads the .pass file.
-   ptrace() is meant to deter you from using /bin/sh shellcode */
+/* ヒント: .pass ファイルを開いて読み込むシェルコードを書くこと。
+   ptrace() は、/bin/sh を起動するシェルコードを使わせないためのものです */
 
 int main()
 {
@@ -28,28 +28,28 @@ int main()
         prctl(PR_SET_PDEATHSIG, SIGHUP);
         ptrace(PTRACE_TRACEME, 0, NULL, NULL);
 
-        /* this is all you need to worry about */
-        puts("just give me some shellcode, k");
+        /* 気にする必要があるのはここだけです */
+        puts("シェルコードをちょうだい、いいね?");
         gets(buffer);
     }
     else
     {
-        /* mini exec() sandbox, you can ignore this */
+        /* 小さな exec() サンドボックス。ここは無視して構いません */
         while(1)
         {
             wait(&status);
             if (WIFEXITED(status) || WIFSIGNALED(status)){
-                puts("child is exiting...");
+                puts("子プロセスを終了します...");
                 break;
             }
 
-            /* grab the syscall # */
+            /* システムコール番号を取得する */
             syscall = ptrace(PTRACE_PEEKUSER, child, 4 * ORIG_EAX, NULL);
 
-            /* filter out syscall 11, exec */
+            /* システムコール 11 (exec) を弾く */
             if(syscall == 11)
             {
-                printf("no exec() for you\n");
+                printf("exec() は使わせません\n");
                 kill(child, SIGKILL);
                 break;
             }

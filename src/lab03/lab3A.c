@@ -7,43 +7,43 @@
 
 /* gcc -Wall -z execstack -o lab3A lab3A.c */
 
-/* get a number from the user and store it */
+/* ユーザーから数値を受け取って保存する */
 int store_number(unsigned int * data)
 {
     unsigned int input = 0;
     unsigned int index = 0;
 
-    /* get number to store */
-    printf(" Number: ");
+    /* 保存する数値を取得する */
+    printf(" 数値: ");
     input = get_unum();
 
-    /* get index to store at */
-    printf(" Index: ");
+    /* 保存先のインデックスを取得する */
+    printf(" インデックス: ");
     index = get_unum();
 
-    /* make sure the slot is not reserved */
+    /* そのスロットが予約済みでないことを確認する */
     if(index % 3 == 0 || (input >> 24) == 0xb7)
     {
-        printf(" *** ERROR! ***\n");
-        printf("   This index is reserved for quend!\n");
-        printf(" *** ERROR! ***\n");
+        printf(" *** エラー! ***\n");
+        printf("   このインデックスは quend 用に予約されています!\n");
+        printf(" *** エラー! ***\n");
 
         return 1;
     }
 
-    /* save the number to data storage */
+    /* 数値をデータ保管領域に保存する */
     data[index] = input;
 
     return 0;
 }
 
-/* returns the contents of a specified storage index */
+/* 指定された保管領域のインデックスの内容を返す */
 int read_number(unsigned int * data)
 {
     unsigned int index = 0;
 
-    /* get index to read from */
-    printf(" Index: ");
+    /* 読み込むインデックスを取得する */
+    printf(" インデックス: ");
     index = get_unum();
 
     printf(" Number at data[%u] is %u\n", index, data[index]);
@@ -57,35 +57,35 @@ int main(int argc, char * argv[], char * envp[])
     char cmd[20] = {0};
     unsigned int data[STORAGE_SIZE] = {0};
 
-    /* doom doesn't like enviroment variables */
+    /* doom は環境変数が嫌いです */
     clear_argv(argv);
     clear_envp(envp);
 
     printf("----------------------------------------------------\n"\
-           "  Welcome to quend's crappy number storage service!  \n"\
+           "  quend のしょぼい数値保管サービスへようこそ!\n"\
            "----------------------------------------------------\n"\
-           " Commands:                                          \n"\
-           "    store - store a number into the data storage    \n"\
-           "    read  - read a number from the data storage     \n"\
-           "    quit  - exit the program                        \n"\
+           " コマンド:\n"\
+           "    store - データ保管領域に数値を保存します\n"\
+           "    read  - データ保管領域から数値を読み出します\n"\
+           "    quit  - プログラムを終了します\n"\
            "----------------------------------------------------\n"\
-           "   quend has reserved some storage for herself :>    \n"\
+           "   quend は自分用に保管領域を少し確保しています :>\n"\
            "----------------------------------------------------\n"\
            "\n");
 
 
-    /* command handler loop */
+    /* コマンド処理ループ */
     while(1)
     {
-        /* setup for this loop iteration */
-        printf("Input command: ");
+        /* このループの繰り返しの準備 */
+        printf("コマンドを入力: ");
         res = 1;
 
-        /* read user input, trim newline */
+        /* ユーザーの入力を読み込み、改行を取り除く */
         fgets(cmd, sizeof(cmd), stdin);
         cmd[strlen(cmd)-1] = '\0';
 
-        /* select specified user command */
+        /* ユーザーが指定したコマンドを選ぶ */
         if(!strncmp(cmd, "store", 5))
             res = store_number(data);
         else if(!strncmp(cmd, "read", 4))
@@ -93,11 +93,11 @@ int main(int argc, char * argv[], char * envp[])
         else if(!strncmp(cmd, "quit", 4))
             break;
 
-        /* print the result of our command */
+        /* コマンドの結果を表示する */
         if(res)
-            printf(" Failed to do %s command\n", cmd);
+            printf(" %s コマンドに失敗しました\n", cmd);
         else
-            printf(" Completed %s command successfully\n", cmd);
+            printf(" %s コマンドは正常に完了しました\n", cmd);
 
         memset(cmd, 0, sizeof(cmd));
     }

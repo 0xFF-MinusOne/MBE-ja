@@ -3,13 +3,13 @@
 #include <string.h>
 
 /*
- * compiled with:
+ * コンパイル方法:
  * gcc -O0 -fno-stack-protector lab2A.c -o lab2A
  */
 
 void shell()
 {
-	printf("You got it\n");
+	printf("やりましたね\n");
 	system("/bin/sh");
 }
 
@@ -23,24 +23,24 @@ void concatenate_first_chars()
 	} locals;
 	locals.cat_pointer = locals.cat_buf;
 
-	printf("Input 10 words:\n");
+	printf("10 個の単語を入力してください:\n");
 	for(locals.i=0; locals.i!=10; locals.i++)
 	{
-		// Read from stdin
+		// 標準入力から読み込む
 		if(fgets(locals.word_buf, 0x10, stdin) == 0 || locals.word_buf[0] == '\n')
 		{
-			printf("Failed to read word\n");
+			printf("単語の読み込みに失敗しました\n");
 			return;
 		}
-		// Copy first char from word to next location in concatenated buffer
+		// 単語の先頭の 1 文字を、連結用バッファの次の位置にコピーする
 		*locals.cat_pointer = *locals.word_buf;
 		locals.cat_pointer++;
 	}
 
-	// Even if something goes wrong, there's a null byte here
-	//   preventing buffer overflows
+	// たとえ何かがおかしくなっても、ここに null バイトがあるので、
+	//   バッファオーバーフローは防げる
 	locals.cat_buf[10] = '\0';
-	printf("Here are the first characters from the 10 words concatenated:\n\
+	printf("10 個の単語の先頭文字を連結したものです:\n\
 %s\n", locals.cat_buf);
 }
 
@@ -48,12 +48,12 @@ int main(int argc, char** argv)
 {
 	if(argc != 1)
 	{
-		printf("usage:\n%s\n", argv[0]);
+		printf("使い方:\n%s\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
 	concatenate_first_chars();
 
-	printf("Not authenticated\n");
+	printf("認証されていません\n");
 	return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
-/* doom doesn't mess around with his gcc protections, everything is on! */
-/* compiled with: gcc -z relro -z now -fPIE -pie -fstack-protector-all -o heap_uaf heap_uaf.c */
+/* doom は gcc の保護機能に手を抜かない。すべて有効だ! */
+/* コンパイル方法: gcc -z relro -z now -fPIE -pie -fstack-protector-all -o heap_uaf heap_uaf.c */
 
 #include <stdio.h>
 #include <string.h>
@@ -19,12 +19,12 @@ struct person {
 
 void print_cool(char * who)
 {
-    printf("%s is cool!\n", who);
+    printf("%s はかっこいい!\n", who);
 }
 
 void print_meh(char * who)
 {
-    printf("%s is meh...\n", who);
+    printf("%s はいまいち...\n", who);
 }
 
 void secret_shell()
@@ -34,18 +34,18 @@ void secret_shell()
 
 void print_menu()
 {
-    printf("-- Menu ----------------------\n"
-           "1. Make coolguy\n"
-           "2. Make a_person\n"
-           "3. Delete coolguy\n"
-           "4. Delete a_person\n"
-           "5. Print coolguy message\n"
-           "6. Print person info\n"
-           "7. Quit\n"
-           "Enter Choice: ");
+    printf("-- メニュー ----------------------\n"
+           "1. coolguy を作る\n"
+           "2. a_person を作る\n"
+           "3. coolguy を削除する\n"
+           "4. a_person を削除する\n"
+           "5. coolguy のメッセージを表示する\n"
+           "6. person の情報を表示する\n"
+           "7. 終了する\n"
+           "選択してください: ");
 }
 
-/* bugs galore... but no memory corruption! */
+/* バグだらけ... でもメモリ破壊はなし! */
 int main(int argc, char * argv[])
 {
     struct toystr * coolguy = NULL;
@@ -56,94 +56,94 @@ int main(int argc, char * argv[])
     {
         print_menu();
         
-        /* get menu option */
+        /* メニューの選択肢を取得する */
         scanf("%u", &choice);
         getc(stdin);
 
-        /* perform menu actions */
+        /* メニューの処理を実行する */
         if(choice == 1)
         {
             coolguy = malloc(sizeof(struct toystr));
-            printf("New coolguy is at 0x%08x\n", (unsigned int)coolguy);
+            printf("新しい coolguy は 0x%08x にあります\n", (unsigned int)coolguy);
             
-            /* no memory corruption this time */
-            printf("Input coolguy's name: ");
+            /* 今回はメモリ破壊なし */
+            printf("coolguy の名前を入力してください: ");
             fgets(coolguy->buffer, 20, stdin);
             coolguy->buffer[strcspn(coolguy->buffer, "\n")] = 0;
             coolguy->message = &print_cool;
 
-            /* yay */
-            printf("Created new coolguy!\n");
+            /* やったー */
+            printf("新しい coolguy を作成しました!\n");
         }
         else if(choice == 2)
         {
             a_person = malloc(sizeof(struct person));
-            printf("New person is at 0x%08x\n", (unsigned int)a_person);
+            printf("新しい person は 0x%08x にあります\n", (unsigned int)a_person);
 
-            /* initialize a_person */
-            printf("Input a_person's name: ");
+            /* a_person を初期化する */
+            printf("a_person の名前を入力してください: ");
             fgets(a_person->name, 16, stdin);
             a_person->name[strcspn(a_person->name, "\n")] = 0;
             
-            printf("Input a_person's favorite number: ");
+            printf("a_person の好きな数を入力してください: ");
             scanf("%u", &a_person->favorite_num);
             getc(stdin);
 
-            printf("Input a_person's age: ");
+            printf("a_person の年齢を入力してください: ");
             scanf("%u", &a_person->age);
             getc(stdin);
             if(a_person->age > 110 || a_person->age < 0)
-                printf("Wow your age is pretty crazy yo\n");
+                printf("うわ、年齢がかなりぶっ飛んでるね\n");
 
-            /* all done here */
-            printf("Created a new person!\n");
+            /* ここまでで完了 */
+            printf("新しい person を作成しました!\n");
         }
         else if(choice == 3)
         {
             if(coolguy)
             {
                 free(coolguy);
-                printf("Deleted coolguy!\n");
+                printf("coolguy を削除しました!\n");
             }
             else
-                printf("There is no coolguy to free!\n");
+                printf("解放できる coolguy がありません!\n");
         }
         else if(choice == 4)
         {
             if(a_person)
             {
                 free(a_person);
-                printf("Deleted person!\n");
+                printf("person を削除しました!\n");
             }
             else
-                printf("There is no person to free!\n");
+                printf("解放できる person がありません!\n");
         }
         else if(choice == 5)
         {
             if(coolguy)
                 coolguy->message(coolguy->buffer);
             else
-                printf("There is no coolguy to print the cool message!\n");
+                printf("かっこいいメッセージを表示できる coolguy がありません!\n");
         }
         else if(choice == 6)
         {
             if(a_person)
             {
-                printf("Person's name: %s\n", a_person->name);
-                printf("Person's age: %d\n", a_person->age);
-                printf("Persons' favorite number: %u\n", a_person->favorite_num);
+                printf("person の名前: %s\n", a_person->name);
+                printf("person の年齢: %d\n", a_person->age);
+                printf("person の好きな数: %u\n", a_person->favorite_num);
             }
             else
-                printf("There is no person to print!\n");
+                printf("表示できる person がありません!\n");
         }
         else if(choice == 7)
             break;
         else
-            printf("Invalid choice!\n");
+            printf("選択肢が不正です!\n");
       
         choice = 0;
     }
 
-    printf("See you tomorrow!\n");
+    printf("また明日!\n");
     return 0;
 }

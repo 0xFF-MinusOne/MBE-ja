@@ -5,7 +5,7 @@
 
 char global_str[128];
 
-/* reads a string, copies it to a global */
+/* 文字列を読み込み、グローバル変数にコピーする */
 void copytoglobal()
 {
     char buffer[128] = {0};
@@ -17,8 +17,8 @@ int main()
 {
     char buffer[128] = {0};
 
-    printf("I included libc for you...\n"\
-           "Can you ROP to system()?\n");
+    printf("あなたのために libc を含めておきました...\n"\
+           "system() まで ROP できますか?\n");
 
     copytoglobal();
 

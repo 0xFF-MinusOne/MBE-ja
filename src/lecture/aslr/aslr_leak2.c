@@ -9,14 +9,14 @@ int main(int argc, char * argv[])
     
     if(argc < 2)
     {
-        printf("Please provide two arguments.\n");
+        printf("引数を 2 つ指定してください。\n");
         return 1;
     }
 
     memcpy(leaky, argv[1], 16);
     
-    printf("Leaky buffer: %s\n", leaky);
-    printf("another round? : ");
+    printf("漏れるバッファ: %s\n", leaky);
+    printf("もう一回? : ");
     fgets(leaky, 64, stdin);
 
     return 0;

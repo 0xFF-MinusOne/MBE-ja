@@ -1,18 +1,18 @@
 /*
-iptables sux. 
+iptables はダメだ。 
 */
 
 
-#include <linux/module.h>    // included for all kernel modules
-#include <linux/kernel.h>    // included for KERN_INFO
-#include <linux/init.h>      // included for __init and __exit macros
+#include <linux/module.h>    // すべてのカーネルモジュールで必要
+#include <linux/kernel.h>    // KERN_INFO のために必要
+#include <linux/init.h>      // __init と __exit マクロのために必要
 
-#include <linux/fs.h>        // included for filesystem structs
-#include <linux/miscdevice.h>// included for device driver stuff :
-#include <linux/string.h>    // Because memcpy :)
+#include <linux/fs.h>        // ファイルシステムの構造体のために必要
+#include <linux/miscdevice.h>// デバイスドライバ関連のために必要 :
+#include <linux/string.h>    // memcpy のため :)
 #include <linux/random.h>    // get_random_bytes()
 
-// Networking Includes
+// ネットワーク関連のインクルード
 #include <net/protocol.h>
 #include <linux/netfilter.h>
 #include <linux/netfilter_ipv4.h>
@@ -51,15 +51,15 @@ unsigned int pkt_hook(unsigned int hooknum, struct sk_buff *skb, const struct
              net_device * in, const struct net_device * out, 
 	                  int (*okfn)(struct sk_buff *)) {
 /*
-    This function filters packets as they come into the system.
-    Callback filters take precedence over disallow filters.
+    この関数は、システムに入ってくるパケットをフィルタリングします。
+    コールバックフィルタは、拒否フィルタ (disallow filter) より優先されます。
 */
     
     struct disallow_filter * walkera;
     struct callback_filter * walkerb;
     struct iphdr * ip_header;
     
-    printk(KERN_INFO "[uTables] Got a packet!\n");
+    printk(KERN_INFO "[uTables] パケットを受信しました!\n");
 
     ip_header = (struct iphdr *)skb_network_header(skb);
 
@@ -84,7 +84,7 @@ unsigned int pkt_hook(unsigned int hooknum, struct sk_buff *skb, const struct
         walkera = walkera->next;
     }
     if (walkera) {
-        printk(KERN_INFO "[uTables] Caught a disallowed Packet!\n");
+        printk(KERN_INFO "[uTables] 拒否対象のパケットを検出しました!\n");
         return NF_DROP;
     }
 
@@ -95,7 +95,7 @@ unsigned int pkt_hook(unsigned int hooknum, struct sk_buff *skb, const struct
 void emulate_packet(int pnum) {
     struct disallow_filter * walkera;
     struct callback_filter * walkerb;
-    printk(KERN_INFO "[uTables] Emulating Protocol: %d\n", pnum);
+    printk(KERN_INFO "[uTables] プロトコルをエミュレートします: %d\n", pnum);
     
 
     walkera = dfilter_head;
@@ -108,7 +108,7 @@ void emulate_packet(int pnum) {
         walkerb = walkerb->next;
     }
     if (walkerb) {
-        printk(KERN_INFO "Found callback filter!\n");
+        printk(KERN_INFO "コールバックフィルタが見つかりました!\n");
         walkerb->callback(walkerb);
         return;
     }
@@ -120,14 +120,14 @@ void emulate_packet(int pnum) {
         walkera = walkera->next;
     }
     if (walkera) {
-        printk(KERN_INFO "[uTables] Caught a disallowed Packet!\n");
+        printk(KERN_INFO "[uTables] 拒否対象のパケットを検出しました!\n");
         return;
     }
     return;
 }
 
 void default_callback(struct sk_buff  * skb) {
-    printk(KERN_INFO "[uTables] Default Callback Hit!\n");
+    printk(KERN_INFO "[uTables] デフォルトのコールバックが呼ばれました!\n");
     return;
 }
 
@@ -138,10 +138,10 @@ static ssize_t pwn_read(struct file* file, char * buf, size_t count, loff_t *ppo
 
 int add_cfilter(struct callback_filter * filt) {
 /*
-    Add a callback filter to uTables.
+    uTables にコールバックフィルタを追加します。
 */
     struct callback_filter * nfilter, *walker;
-    printk("[uTables] Adding a callback filter\n");
+    printk("[uTables] コールバックフィルタを追加します\n");
     
     nfilter = kmalloc(sizeof(struct callback_filter), GFP_KERNEL);
     nfilter->pr_num = filt->pr_num;
@@ -156,12 +156,12 @@ int add_cfilter(struct callback_filter * filt) {
     walker->next = nfilter;
     nfilter->prev = walker;
     
-    printk(KERN_INFO "New Filter At Address: %p\n", nfilter);
-    printk(KERN_INFO "New Filter Protocol: %u\n", nfilter->pr_num);
-    printk(KERN_INFO "New Filter ID: %u\n", nfilter->id);
-    printk(KERN_INFO "New Filter Callback @: %p\n", nfilter->callback);
-    printk(KERN_INFO "New Filter NEXT: %p\n", nfilter->next);
-    printk(KERN_INFO "New Filter PREV: %p\n", nfilter->prev);
+    printk(KERN_INFO "新しいフィルタのアドレス: %p\n", nfilter);
+    printk(KERN_INFO "新しいフィルタのプロトコル: %u\n", nfilter->pr_num);
+    printk(KERN_INFO "新しいフィルタの ID: %u\n", nfilter->id);
+    printk(KERN_INFO "新しいフィルタのコールバック @: %p\n", nfilter->callback);
+    printk(KERN_INFO "新しいフィルタの NEXT: %p\n", nfilter->next);
+    printk(KERN_INFO "新しいフィルタの PREV: %p\n", nfilter->prev);
 
     return 0;
 
@@ -169,7 +169,7 @@ int add_cfilter(struct callback_filter * filt) {
 
 int add_dfilter(struct disallow_filter * filt) {
 /*
-    Add a disallow filter to uTables.
+    uTables に拒否フィルタを追加します。
 */
 
     struct disallow_filter * nfilter, *walker;
@@ -188,17 +188,17 @@ int add_dfilter(struct disallow_filter * filt) {
     walker->next = nfilter;
     nfilter->prev = walker;
     
-    printk(KERN_INFO "New Filter At Address: %p", nfilter);
-    printk(KERN_INFO "New Filter Protocol: %u\n", nfilter->pr_num);
-    printk(KERN_INFO "New Filter Port: %u\n", nfilter->port);
-    printk(KERN_INFO "New Filter ID: %u\n", nfilter->id);
+    printk(KERN_INFO "新しいフィルタのアドレス: %p", nfilter);
+    printk(KERN_INFO "新しいフィルタのプロトコル: %u\n", nfilter->pr_num);
+    printk(KERN_INFO "新しいフィルタのポート: %u\n", nfilter->port);
+    printk(KERN_INFO "新しいフィルタの ID: %u\n", nfilter->id);
 
     return 0;
 }
 
 int remove_defilter(int pr_num) {
 /*
-     Remove a filter for the specified protocol number. 
+     指定されたプロトコル番号のフィルタを削除します。 
 */
      struct disallow_filter * walker;
 
@@ -207,7 +207,7 @@ int remove_defilter(int pr_num) {
          walker = walker->next;
      }
      if(walker) {
-         printk(KERN_INFO "Removing Filter for %u at %08x\n", walker->pr_num, walker);
+         printk(KERN_INFO "%u のフィルタを %08x から削除します\n", walker->pr_num, walker);
          walker->prev->next = walker->next;
 	 if(walker->next) {
 	     walker->next->prev = walker->prev;
@@ -220,9 +220,9 @@ int remove_defilter(int pr_num) {
 
 int modify_callback(void * data) {
 /*
-    Apart from the default Callback, you may load
-    additional kernel modules and use their functions
-    as callback routines from the filtering hook here.
+    デフォルトのコールバックとは別に、
+    追加のカーネルモジュールをロードして、その関数を
+    ここでフィルタリングフックからのコールバックルーチンとして使うこともできます。
 */
     struct callback_filter * walker;
     unsigned int addr;
@@ -234,7 +234,7 @@ int modify_callback(void * data) {
     printk(KERN_INFO "ID: %u\n", cid);
     
     if (addr < 0xc0000000) {
-        printk(KERN_INFO "[ERROR] Userspace Address detected!\n");
+        printk(KERN_INFO "[ERROR] ユーザー空間のアドレスを検出しました!\n");
         return -1;
     }
 
@@ -247,40 +247,40 @@ int modify_callback(void * data) {
     }
     if (walker) {
         walker->callback = addr;
-        printk(KERN_INFO "Updated Filter ID: %u Callback to : %u\n",walker->id, walker->callback);
+        printk(KERN_INFO "フィルタ ID %u のコールバックを更新しました: %u\n",walker->id, walker->callback);
     }
     else {
-        printk(KERN_INFO "Could not find Filter with ID: %u\n",walker->id);
+        printk(KERN_INFO "ID %u のフィルタが見つかりませんでした\n",walker->id);
         return -1;
     }
     return 0;
 }
 
 static ssize_t pwn_write(struct file* file, const char * buf, size_t count, loff_t *ppos)
-{ // This is how you configure uTables
+{ // uTables はこのようにして設定します
    
-    if (buf[0] == '\x01') { // Now you know you're talking to this thing :)
-        printk(KERN_INFO "The flag is in /root/flag\n");
+    if (buf[0] == '\x01') { // これで、この相手と話していることが分かります :)
+        printk(KERN_INFO "フラグは /root/flag にあります\n");
     }
 
-    if (buf[0] == '\x02') { // Add a disallow filter
-        printk(KERN_INFO "[uTables] Adding new disallow filter\n");
+    if (buf[0] == '\x02') { // 拒否フィルタを追加する
+        printk(KERN_INFO "[uTables] 新しい拒否フィルタを追加します\n");
         printk(KERN_INFO "PR: %u", buf[1]);
         add_dfilter( (struct disallow_filter *) &(buf[1]));
     }
 
-    if (buf[0] == '\x03') { // Add a callback filter
-        printk(KERN_INFO "[uTables] Adding a new callback filter\n");
+    if (buf[0] == '\x03') { // コールバックフィルタを追加する
+        printk(KERN_INFO "[uTables] 新しいコールバックフィルタを追加します\n");
         add_cfilter( (struct callback_filter *) &(buf[1]));
     }
 
-    if (buf[0] == '\x04') { // Modify a callback function
-        printk(KERN_INFO "[uTables] Modifying a callback\n");
+    if (buf[0] == '\x04') { // コールバック関数を変更する
+        printk(KERN_INFO "[uTables] コールバックを変更します\n");
         modify_callback((void *) &(buf[4]));
     }
 
-    if (buf[0] == '\x05') { // Emulate a Packet arriving in the kernel.
-        printk(KERN_INFO "[uTables] Emulating a packet arriving\n");
+    if (buf[0] == '\x05') { // カーネルにパケットが到着したことをエミュレートする。
+        printk(KERN_INFO "[uTables] パケットの到着をエミュレートします\n");
         emulate_packet( (int) (buf[1]));
 
     }
@@ -302,19 +302,19 @@ static struct miscdevice pwn_dev = {
 static int __init mod_init(void)
 {
 /*
-    Initialize data structures and register a device that will be used to 
-    configure uTables.
-    Also set up our networking hook so we can look at packets coming into the
-    kernel.
+    データ構造を初期化し、uTables を設定するために使うデバイスを 
+    登録します。
+    また、カーネルに入ってくるパケットを見られるように、
+    ネットワークのフックも設定します。
 */
 
     int ret;
-    // Register our device and create heads for our linked lists 
+    // デバイスを登録し、連結リストの先頭を作る 
     ret = misc_register(&pwn_dev); 
     dfilter_head = kmalloc(sizeof(struct disallow_filter), GFP_KERNEL);
     cfilter_head = kmalloc(sizeof(struct callback_filter), GFP_KERNEL);
    
-    // Initialize our linked list heads
+    // 連結リストの先頭を初期化する
     dfilter_head->pr_num = -1;
     dfilter_head->port = -1;
     dfilter_head->next = 0;
@@ -326,29 +326,29 @@ static int __init mod_init(void)
     cfilter_head->next = 0;
     cfilter_head->prev = 0;
 
-    // Set up our basic netfilter hook
+    // 基本的な netfilter フックを設定する
     nfho.hook = pkt_hook;
     nfho.hooknum = 0;
     nfho.pf = PF_INET;
     nfho.priority = NF_IP_PRI_FIRST;
 
-    // Register our hook 
+    // フックを登録する 
     nf_register_hook(&nfho);
 
-    printk(KERN_INFO "Finished Init\n"); 
-    printk(KERN_INFO "Can u get r00t?\n");
+    printk(KERN_INFO "初期化が完了しました\n"); 
+    printk(KERN_INFO "r00t を取れますか?\n");
     return 0;    
 }
 
 static void __exit mod_cleanup(void)
 {
-    printk(KERN_INFO "Cleaning up module.\n");
+    printk(KERN_INFO "モジュールを後始末しています。\n");
     misc_deregister(&pwn_dev);
     nf_unregister_hook(&nfho);
 }
 
 
-// We're "registering" our module with the rest of the Kernel here.
+// ここで、モジュールをカーネルに「登録」している。
 module_init(mod_init);
 module_exit(mod_cleanup);
 

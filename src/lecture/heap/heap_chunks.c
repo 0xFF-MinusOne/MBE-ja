@@ -1,4 +1,4 @@
-/* compiled with: gcc -o heap_chunks heap_chunks.c */
+/* コンパイル方法: gcc -o heap_chunks heap_chunks.c */
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -21,8 +21,8 @@ int main()
     unsigned int lengths[] = {0, 4, 8, 16, 24, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384};
     int i;
 
-    /* malloc chunks, and them print their fields */
-    printf("mallocing...\n");
+    /* チャンクを malloc して、そのフィールドを表示する */
+    printf("malloc しています...\n");
 
     for(i = 0; i < LEN; i++)
         ptr[i] = malloc(lengths[i]);

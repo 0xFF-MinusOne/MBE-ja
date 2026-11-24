@@ -1,17 +1,17 @@
 /*
-Unix-Dude sux at writing rootkits.
+Unix-Dude はルートキットを書くのが下手だ。
 
-He forgot the get_r00t code q_q.
+彼は get_r00t のコードを忘れたんだ q_q。
 */
 
 
-#include <linux/module.h>    // included for all kernel modules
-#include <linux/kernel.h>    // included for KERN_INFO
-#include <linux/init.h>      // included for __init and __exit macros
+#include <linux/module.h>    // すべてのカーネルモジュールで必要
+#include <linux/kernel.h>    // KERN_INFO のために必要
+#include <linux/init.h>      // __init と __exit マクロのために必要
 
-#include <linux/fs.h>        // included for filesystem structs
-#include <linux/miscdevice.h>// included for device driver stuff :
-#include <linux/string.h>    // Because memcpy :)
+#include <linux/fs.h>        // ファイルシステムの構造体のために必要
+#include <linux/miscdevice.h>// デバイスドライバ関連のために必要 :
+#include <linux/string.h>    // memcpy のため :)
 #include <linux/random.h>    // get_random_bytes()
 
 #include <asm/uaccess.h>
@@ -32,23 +32,23 @@ typedef struct key_material {
 struct key_material * sekret;
 
 static ssize_t pwn_write(struct file* file, const char * buf, size_t count, loff_t *ppos)
-{ // Here we check for the password
+{ // ここでパスワードを確認する
 
     printk(KERN_INFO "%s\n",buf);
     if( count == 0x31337) {
         if (sekret->auth) {
-	     // Do the root thing here.
-	     printk(KERN_INFO "Nice privs bro.\n");
+	     // ここで root に関する処理を行う。
+	     printk(KERN_INFO "いい権限じゃん。\n");
         }
 	return 0x31337;
     }
     
     if(buf[0] == '\x01') {
-        printk("Flag is @ /root/flag");
+        printk("フラグは /root/flag にあります");
     }
 
     if ( ( *(unsigned int *)buf ^ 0xcafebabe) == 0) {
-        printk(KERN_INFO "Performing Key Authentication now...\n");
+        printk(KERN_INFO "鍵の認証を行います...\n");
 	sekret->algo(buf);
     }
 
@@ -67,13 +67,13 @@ static struct miscdevice pwn_dev = {
 
 void algo_xor(char * buf) {
 /*
-    Secure One-Time Pad Authentication Function.
+    安全なワンタイムパッド認証関数。
 */
     int i;
     int sum;
 
     sum = 0;
-    printk(KERN_INFO "Inside algo_xor!\n");
+    printk(KERN_INFO "algo_xor の中です!\n");
    
     for(i=0; i <= 1024; i++) {
         sekret->key[i] ^= buf[i];
@@ -87,40 +87,40 @@ void algo_xor(char * buf) {
         sekret->auth = 1;
     }
     else {
-        printk(KERN_INFO "Authentication Failed!\n");
+        printk(KERN_INFO "認証に失敗しました!\n");
     	memset(sekret, 0 , sizeof(struct key_material));
     	get_random_bytes(&(sekret->key),1024);
     }
     return;
 }
 
-//Think of this as the familiar "main" function
+// おなじみの「main」関数のようなものだと考えてください
 static int __init mod_init(void)
 {
     int ret;
-    // Register Device to /dev
+    // デバイスを /dev に登録する
     ret = misc_register(&pwn_dev);
     
-    // Allocate Space for the key 
+    // 鍵用の領域を確保する 
     sekret = kmalloc(sizeof(struct key_material), GFP_KERNEL);
     get_random_bytes(&sekret->key, 1024);
    
-    // Set the algorithm to a sane default
+    // アルゴリズムを妥当なデフォルト値に設定する
     sekret->algo = algo_xor;   
 
-    printk(KERN_INFO "Finished Init\n"); 
-    printk(KERN_INFO "Can u get r00t?\n");
+    printk(KERN_INFO "初期化が完了しました\n"); 
+    printk(KERN_INFO "r00t を取れますか?\n");
     return 0;    
 }
 
 static void __exit mod_cleanup(void)
 {
-    printk(KERN_INFO "Cleaning up module.\n");
+    printk(KERN_INFO "モジュールを後始末しています。\n");
     misc_deregister(&pwn_dev);
 }
 
 
-//We're "registering" our module with the rest of the Kernel here.
+// ここで、モジュールをカーネルに「登録」している。
 module_init(mod_init);
 module_exit(mod_cleanup);
 

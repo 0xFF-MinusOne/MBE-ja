@@ -3,13 +3,13 @@
 #include <string.h>
 
 /*
- * compiled with:
+ * コンパイル方法:
  * gcc -O0 -fno-stack-protector lab2C.c -o lab2C
  */
 
 void shell()
 {
-	printf("You did it.\n");
+	printf("やりましたね。\n");
 	system("/bin/sh");
 }
 
@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 {
 	if(argc != 2)
 	{
-		printf("usage:\n%s string\n", argv[0]);
+		printf("使い方:\n%s 文字列\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 	}
 	else
 	{
-		printf("Not authenticated.\nset_me was %d\n", set_me);
+		printf("認証されていません。\nset_me は %d でした\n", set_me);
 	}
 
 	return EXIT_SUCCESS;

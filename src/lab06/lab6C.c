@@ -1,6 +1,6 @@
 /*
-Exploitation with ASLR
-Lab C
+ASLR 有効下でのエクスプロイト
+ラボ C
 
  gcc -pie -fPIE -fno-stack-protector -o lab6C lab6C.c
 */
@@ -18,12 +18,12 @@ struct savestate {
 void set_tweet(struct savestate *save );
 void set_username(struct savestate * save);
 
-/* debug functionality, not used in production */
+/* デバッグ用の機能。本番では使われない */
 void secret_backdoor()
 {
     char cmd[128];
 
-    /* reads a command and executes it */
+    /* コマンドを読み込んで実行する */
     fgets(cmd, 128, stdin);
     system(cmd);
 
@@ -34,15 +34,15 @@ void handle_tweet()
 {
     struct savestate save;
 
-    /* Initialize our save state to sane values. */
+    /* 保存状態を正常な値で初期化する */
     memset(save.username, 0, 40);
     save.msglen = 140;
 
-    /* read a username and tweet from the user */
+    /* ユーザーからユーザー名とツイートを読み込む */
     set_username(&save);
     set_tweet(&save);
 
-    printf(">: Tweet sent!\n");
+    printf(">: ツイートを送信しました!\n");
     return;
 }
 
@@ -51,10 +51,10 @@ void set_tweet(struct savestate *save )
     char readbuf[1024];
     memset(readbuf, 0, 1024);
 
-    printf(">: Tweet @Unix-Dude\n");
+    printf(">: @Unix-Dude にツイートする\n");
     printf(">>: ");
 
-    /* read a tweet from the user, safely copy it to struct */
+    /* ユーザーからツイートを読み込み、構造体に安全にコピーする */
     fgets(readbuf, 1024, stdin);
     strncpy(save->tweet, readbuf, save->msglen);
 
@@ -67,15 +67,15 @@ void set_username(struct savestate * save)
     char readbuf[128];
     memset(readbuf, 0, 128);
 
-    printf(">: Enter your username\n");
+    printf(">: ユーザー名を入力してください\n");
     printf(">>: ");
 
-    /* Read and copy the username to our savestate */
+    /* ユーザー名を読み込み、保存状態にコピーする */
     fgets(readbuf, 128, stdin);
     for(i = 0; i <= 40 && readbuf[i]; i++)
         save->username[i] = readbuf[i];
 
-    printf(">: Welcome, %s", save->username);
+    printf(">: ようこそ、%s", save->username);
     return;
 }
 
@@ -84,10 +84,10 @@ int main(int argc, char * argv[])
 
     printf(
     "--------------------------------------------\n" \
-    "|   ~Welcome to l33t-tw33ts ~    v.0.13.37 |\n" \
+    "|   ~l33t-tw33ts へようこそ ~    v.0.13.37 |\n" \
     "--------------------------------------------\n");
 
-    /* make some tweets */
+    /* ツイートをいくつか作る */
     handle_tweet();
 
     return EXIT_SUCCESS;

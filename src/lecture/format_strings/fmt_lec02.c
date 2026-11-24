@@ -1,5 +1,5 @@
 /*
- * Format Strings Example 2
+ * 書式文字列の例 2
  *
  */
 #include <stdio.h>
@@ -14,14 +14,14 @@ main(int argc, char *argv[])
   fgets(buf, 100, stdin);
   printf(buf);
 
-  //HINT
+  //ヒント
   fprintf(stderr, "unchangeable @ %p\n", &unchangeable);
 
-  //fgets makes it impossible to overflow the buffer,
-  //  but just in case...
+  //fgets を使えばバッファをオーバーフローさせることはできないが、
+  //  念のため...
   if (unchangeable != 0xcafebabe) {
-    printf("Cookie overwritten!\n");
-    printf("unchangeable changed to %#x\n", unchangeable);
+    printf("クッキーが上書きされました!\n");
+    printf("unchangeable が %#x に変わりました\n", unchangeable);
     exit(EXIT_FAILURE);
   }
 

@@ -1,5 +1,5 @@
 /*
- *   Format String Lab - C Problem
+ *   書式文字列ラボ - 問題 C
  *   gcc -z execstack -z norelro -fno-stack-protector -o lab4C lab4C.c
  */
 #include <stdio.h>
@@ -17,48 +17,48 @@ int main(int argc, char *argv[])
     FILE *pass_file = NULL;
     int rsize = 0;
 
-    /* open the password file */
+    /* パスワードファイルを開く */
     pass_file = fopen("/home/lab4B/.pass", "r");
     if (pass_file == NULL) {
-        fprintf(stderr, "ERROR: failed to open password file\n");
+        fprintf(stderr, "エラー: パスワードファイルを開けませんでした\n");
         exit(EXIT_FAILURE);
     }
 
-    /* read the contents of the password file */
+    /* パスワードファイルの内容を読み込む */
     rsize = fread(real_pass, 1, PASS_LEN, pass_file);
-    real_pass[strcspn(real_pass, "\n")] = '\0';  // strip \n
+    real_pass[strcspn(real_pass, "\n")] = '\0';  // \n を取り除く
     if (rsize != PASS_LEN) {
-        fprintf(stderr, "ERROR: failed to read password file\n");
+        fprintf(stderr, "エラー: パスワードファイルを読み込めませんでした\n");
         exit(EXIT_FAILURE);
     }
 
-    /* close the password file */
+    /* パスワードファイルを閉じる */
     fclose(pass_file);
 
-    puts("===== [ Secure Access System v1.0 ] =====");
+    puts("===== [ セキュアアクセスシステム v1.0 ] =====");
     puts("-----------------------------------------");
-    puts("- You must login to access this system. -");
+    puts("- このシステムにアクセスするにはログインが必要です。 -");
     puts("-----------------------------------------");
 
-    /* read username securely */
-    printf("--[ Username: ");
+    /* ユーザー名を安全に読み込む */
+    printf("--[ ユーザー名: ");
     fgets(username, 100, stdin);
-    username[strcspn(username, "\n")] = '\0';    // strip \n
+    username[strcspn(username, "\n")] = '\0';    // \n を取り除く
 
-    /* read input password securely */
-    printf("--[ Password: ");
+    /* 入力されたパスワードを安全に読み込む */
+    printf("--[ パスワード: ");
     fgets(in_pass, sizeof(in_pass), stdin);
-    in_pass[strcspn(in_pass, "\n")] = '\0';      // strip \n
+    in_pass[strcspn(in_pass, "\n")] = '\0';      // \n を取り除く
 
     puts("-----------------------------------------");
 
-    /* log the user in if the password is correct */
+    /* パスワードが正しければユーザーをログインさせる */
     if(!strncmp(real_pass, in_pass, PASS_LEN)){
-        printf("Greetings, %s!\n", username);
+        printf("ようこそ、%s!\n", username);
         system("/bin/sh");
     } else {
         printf(username);
-        printf(" does not have access!\n");
+        printf(" にはアクセス権がありません!\n");
         exit(EXIT_FAILURE);
     }
 

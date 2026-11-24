@@ -1,5 +1,5 @@
 /*
- *   Format String Lab - A Problem
+ *   書式文字列ラボ - 問題 A
  *   gcc -z execstack -z relro -z now -o lab4A lab4A.c
  */
 #include <stdio.h>
@@ -32,41 +32,41 @@ main(int argc, char *argv[])
     int target = -1;
 
     if (argc != 2) {
-        printf("Usage: %s filename\n", argv[0]);
+        printf("使い方: %s ファイル名\n", argv[0]);
     }
 
-    // Open log file
+    // ログファイルを開く
     logf = fopen(LOG_FILE, "w");
     if (logf == NULL) {
-        printf("ERROR: Failed to open %s\n", LOG_FILE);
+        printf("エラー: %s を開けませんでした\n", LOG_FILE);
         exit(EXIT_FAILURE);
     }
 
     log_wrapper(logf, "Starting back up: ", argv[1]);
 
-    // Open source
+    // コピー元を開く
     source = fopen(argv[1], "r");
     if (source == NULL) {
-        printf("ERROR: Failed to open %s\n", argv[1]);
+        printf("エラー: %s を開けませんでした\n", argv[1]);
         exit(EXIT_FAILURE);
     }
 
-    // Open dest
+    // コピー先を開く
     strcpy(dest_buf, BACKUP_DIR);
     strncat(dest_buf, argv[1], 100-strlen(dest_buf)-1/*NULL*/);
     target = open(dest_buf, O_CREAT | O_EXCL | O_WRONLY, S_IRUSR | S_IWUSR);
     if (target < 0) {
-        printf("ERROR: Failed to open %s%s\n", BACKUP_DIR, argv[1]);
+        printf("エラー: %s%s を開けませんでした\n", BACKUP_DIR, argv[1]);
         exit(EXIT_FAILURE);
     }
 
-    // Copy data
+    // データをコピーする
     while( ( ch = fgetc(source) ) != EOF)
         write(target, &ch, 1);
 
     log_wrapper(logf, "Finished back up ", argv[1]);
 
-    // Clean up
+    // 後始末
     fclose(source);
     close(target);
 

@@ -1,4 +1,4 @@
-/* compiled with: gcc -z relro -z now -pie -fPIE -fno-stack-protector -o lab6B lab6B.c */
+/* コンパイル方法: gcc -z relro -z now -pie -fPIE -fno-stack-protector -o lab6B lab6B.c */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,29 +8,29 @@
 
 ENABLE_TIMEOUT(300)
 
-/* log the user in */
+/* ユーザーをログインさせる */
 int login()
 {
-    printf("WELCOME MR. FALK\n");
+    printf("ようこそ、FALK さん\n");
 
-    /* you win */
+    /* あなたの勝ちです */
     system("/bin/sh");
     return 0;
 }
 
-/* doom's super secret password mangling scheme */
+/* doom の超極秘のパスワード変換方式 */
 void hash_pass(char * password, char * username)
 {
     int i = 0;
 
-    /* hash pass with chars of username */
+    /* ユーザー名の文字でパスワードをハッシュ化する */
     while(password[i] && username[i])
     {
         password[i] ^= username[i];
         i++;
     }
 
-    /* hash rest of password with a pad char */
+    /* パスワードの残りを埋め文字でハッシュ化する */
     while(password[i])
     {
         password[i] ^= 0x44;
@@ -40,25 +40,25 @@ void hash_pass(char * password, char * username)
     return;
 }
 
-/* doom's super secure password read function */
+/* doom の超安全なパスワード読み込み関数 */
 int load_pass(char ** password)
 {
     FILE * fd = 0;
     int fail = -1;
     int psize = 0;
 
-    /* open the password file */
+    /* パスワードファイルを開く */
     fd = fopen("/home/lab6A/.pass", "r");
     if(fd == NULL)
     {
-        printf("Could not open secret pass!\n");
+        printf("秘密のパスを開けませんでした!\n");
         return fail;
     }
 
-    /* get the size of the password */
+    /* パスワードのサイズを取得する */
     if(fseek(fd, 0, SEEK_END))
     {
-        printf("Failed to seek to end of pass!\n");
+        printf("パスの末尾へのシークに失敗しました!\n");
         return fail;
     }
 
@@ -66,36 +66,36 @@ int load_pass(char ** password)
 
     if(psize == 0 || psize == -1)
     {
-        printf("Could not get pass size!\n");
+        printf("パスのサイズを取得できませんでした!\n");
         return fail;
     }
 
-    /* reset stream */
+    /* ストリームをリセットする */
     if(fseek(fd, 0, SEEK_SET))
     {
-        printf("Failed to see to the start of pass!\n");
+        printf("パスの先頭へのシークに失敗しました!\n");
         return fail;
     }
 
-    /* allocate a buffer for the password */
+    /* パスワード用のバッファを確保する */
     *password = (char *)malloc(psize);
     if(password == NULL)
     {
-        printf("Could not malloc for pass!\n");
+        printf("パス用の malloc に失敗しました!\n");
         return fail;
     }
 
-    /* make sure we read in the whole password */
+    /* パスワード全体を読み込めたことを確認する */
     if(fread(*password, sizeof(char), psize, fd) != psize)
     {
-        printf("Could not read secret pass!\n");
+        printf("秘密のパスを読み込めませんでした!\n");
         free(*password);
         return fail;
     }
 
     fclose(fd);
 
-    /* successfully read in the password */
+    /* パスワードの読み込みに成功した */
     return psize;
 }
 
@@ -107,32 +107,32 @@ int login_prompt(int pwsize, char * secretpw)
     int attempts = -3;
     int result = -1;
 
-    /* login prompt loop */
+    /* ログインプロンプトのループ */
     while(attempts++)
     {
-        /* clear our buffers to avoid any sort of data re-use */
+        /* データの再利用を防ぐため、バッファをクリアする */
         memset(password, 0, sizeof(password));
         memset(username, 0, sizeof(username));
         memset(readbuff, 0, sizeof(readbuff));
 
-        /* safely read username */
-        printf("Enter your username: ");
+        /* ユーザー名を安全に読み込む */
+        printf("ユーザー名を入力してください: ");
         fgets(readbuff, sizeof(readbuff), stdin);
 
-        /* use safe strncpy to copy username from the read buffer */
+        /* 安全な strncpy で、読み込みバッファからユーザー名をコピーする */
         strncpy(username, readbuff, sizeof(username));
 
-        /* safely read password */
-        printf("Enter your password: ");
+        /* パスワードを安全に読み込む */
+        printf("パスワードを入力してください: ");
         fgets(readbuff, sizeof(readbuff), stdin);
 
-        /* use safe strncpy to copy password from the read buffer */
+        /* 安全な strncpy で、読み込みバッファからパスワードをコピーする */
         strncpy(password, readbuff, sizeof(password));
 
-        /* hash the input password for this attempt */
+        /* 今回の試行で入力されたパスワードをハッシュ化する */
         hash_pass(password, username);
 
-        /* check if password is correct */
+        /* パスワードが正しいか確認する */
         if(pwsize > 16 && memcmp(password, secretpw, pwsize) == 0)
         {
             login();
@@ -140,7 +140,7 @@ int login_prompt(int pwsize, char * secretpw)
             break;
         }
 
-        printf("Authentication failed for user %s\n", username);
+        printf("ユーザー %s の認証に失敗しました\n", username);
     }
 
     return result;
@@ -153,35 +153,35 @@ int main(int argc, char* argv[])
 
     disable_buffering(stdout);
 
-    /* load the secret pass */
+    /* 秘密のパスを読み込む */
     pwsize = load_pass(&secretpw);
     pwsize = pwsize > 32 ? 32 : pwsize;
 
-    /* failed to load password */
+    /* パスワードの読み込みに失敗した */
     if(pwsize == 0 || pwsize == -1)
         return EXIT_FAILURE;
 
-    /* hash the password we'll be comparing against */
+    /* 比較対象のパスワードをハッシュ化する */
     hash_pass(secretpw, "lab6A");
-    printf("----------- FALK OS LOGIN PROMPT -----------\n");
+    printf("----------- FALK OS ログイン -----------\n");
     fflush(stdout);
 
-    /* authorization loop */
+    /* 認証ループ */
     if(login_prompt(pwsize, secretpw))
     {
 
-        /* print the super serious warning to ward off hackers */
+        /* ハッカーを追い払うための、とても真剣な警告を表示する */
         printf("+-------------------------------------------------------+\n"\
                "|WARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNIN|\n"\
                "|GWARNINGWARNI - TOO MANY LOGIN ATTEMPTS - NGWARNINGWARN|\n"\
                "|INGWARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWARNINGWAR|\n"\
                "+-------------------------------------------------------+\n"\
-               "|       We have logged this session and will be         |\n"\
-               "|  sending it to the proper CCDC CTF teams to analyze   |\n"\
+               "|        このセッションを記録しました。これから         |\n"\
+               "|   適切な CCDC CTF チームに送り、分析してもらいます    |\n"\
                "|             -----------------------------             |\n"\
-               "|     The CCDC cyber team dispatched will use their     |\n"\
-               "|      masterful IT and networking skills to trace      |\n"\
-               "|       you down and serve swift american justice       |\n"\
+               "|        派遣された CCDC サイバーチームは、その         |\n"\
+               "|     卓越した IT とネットワークの技術を駆使して、      |\n"\
+               "|   あなたを追跡し、迅速なアメリカ式の裁きを下します    |\n"\
                "+-------------------------------------------------------+\n");
 
         return EXIT_FAILURE;

@@ -1,8 +1,8 @@
 /*
- * Tools for anti-debug/disasm
+ * アンチデバッグ/アンチ逆アセンブル用のツール
  */
 
-/* throws off esp analysis to thwart hexrays */
+/* esp の解析を狂わせて、hexrays を妨害する */
 #define deathrays \
     __asm__ volatile("push     %eax      \n"\
                      "xor      %eax, %eax\n"\
@@ -11,17 +11,17 @@
                      ".byte    0x04      \n"\
                      "pop      %eax      \n");
 
-/* clear argv to avoid shellcode */
+/* シェルコードを避けるため、argv をクリアする */
 #define clear_argv(_argv) \
     for (; *_argv; ++_argv) { \
         memset(*_argv, 0, strlen(*_argv)); \
     }
 #define clear_envp(_envp) clear_argv(_envp)
 
-/* disables IO buffering on the file descriptor */
+/* ファイルディスクリプタの入出力バッファリングを無効にする */
 #define disable_buffering(_fd) setvbuf(_fd, NULL, _IONBF, 0)
 
-/* clears stdin up until newline */
+/* 改行まで stdin を読み捨てる */
 void clear_stdin(void)
 {
     char x = 0;
@@ -33,7 +33,7 @@ void clear_stdin(void)
     }
 }
 
-/* gets a number from stdin and cleans up after itself */
+/* stdin から数値を取得し、後始末もする */
 unsigned int get_unum(void)
 {
     unsigned int res = 0;
