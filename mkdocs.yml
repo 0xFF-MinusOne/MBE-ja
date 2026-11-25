@@ -7,6 +7,7 @@ copyright: >-
   日本語訳。原著:
   <a href="https://github.com/RPISEC/MBE">RPISEC/MBE</a>
   / ライセンス: <a href="https://github.com/0xFF-MinusOne/MBE-ja/blob/main/LICENSE">BSD-2-Clause</a>
+  <br>Unofficial Japanese translation of <a href="https://github.com/RPISEC/MBE">RPISEC/MBE</a>. Not reviewed or endorsed by the original authors; the original text prevails.
 
 theme:
   name: material
