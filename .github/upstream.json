@@ -1,0 +1,22 @@
+{
+  "upstreams": [
+    {
+      "repo": "RPISEC/MBE",
+      "branch": "master",
+      "paths": [
+        "ACKNOWLEDGEMENTS",
+        "CHANGELOG",
+        "CMakeLists.txt",
+        "ERRATA.md",
+        "INSTALL",
+        "README.md",
+        "external_tools.sh",
+        "include",
+        "resources",
+        "setup_wargame.sh",
+        "src"
+      ],
+      "base": "200debfff3adf7beeff5e597e9ca9493b779a77e"
+    }
+  ]
+}
