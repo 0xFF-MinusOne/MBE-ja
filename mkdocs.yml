@@ -1,0 +1,60 @@
+site_name: Modern Binary Exploitation(日本語訳)
+site_description: RPISEC/MBE の日本語訳
+site_url: https://0xff-minusone.github.io/MBE-ja/
+repo_url: https://github.com/0xFF-MinusOne/MBE-ja
+docs_dir: .site-src
+copyright: >-
+  日本語訳。原著:
+  <a href="https://github.com/RPISEC/MBE">RPISEC/MBE</a>
+  / ライセンス: <a href="https://github.com/0xFF-MinusOne/MBE-ja/blob/main/LICENSE">BSD-2-Clause</a>
+
+theme:
+  name: material
+  language: ja
+  font: false
+  logo: assets/minusone-mark.svg
+  favicon: assets/minusone-avatar-light.svg
+  features:
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+
+extra_css:
+  - assets/ja-docs.css
+  - assets/mkdocs.css
+  - assets/minusone.css
+extra_javascript:
+  - assets/ja-docs.js
+
+plugins:
+  - search:
+      lang: ja
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/RPISEC/MBE
+      name: 原著(RPISEC/MBE)
+
+nav:
+  - はじめに: README.md
+  - 正誤表: ERRATA.md
